@@ -1,0 +1,49 @@
+---
+- name: src exists
+  stat:
+    path: "{{ archivesspace_home }}/config/config.rb"
+  register: src_exists
+
+- name: Get archivesspace
+  unarchive: 
+    src: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
+    copy: no
+    dest: "{{ archivesspace_target }}"
+  when: src_exists.stat.exists == false
+
+- name: Get mysql connector
+  get_url: 
+    url: "http://central.maven.org/maven2/mysql/mysql-connector-java/{{ jdbc_version }}/mysql-connector-java-{{ jdbc_version }}.jar"
+    dest: "{{ archivesspace_home }}/lib/"
+
+- name: configure connector
+  lineinfile:
+    state: present
+    line: "AppConfig[:db_url] = \"jdbc:mysql://{{ mysql_host }}:3306/archivesspace?user={{ mysql_user }}&password={{ mysql_pass }}&useUnicode=true&characterEncoding=UTF-8\""
+    insertafter: EOF
+    dest: "{{ archivesspace_home }}/config/config.rb"
+    
+- name: run db insert script
+  command: "sh {{ archivesspace_home }}/scripts/setup-database.sh"
+
+- name: check init script exists
+  stat: 
+    path: /etc/init.d/archivesspace
+  register: init_exists
+
+- name: setup init script
+  command: "ln -s {{ archivesspace_home }}/archivesspace.sh /etc/init.d/archivesspace"
+  args:
+    creates: "{{ archivesspace_home }}/archivesspace.sh /etc/init.d/archivesspace"
+  when: init_exists.stat.exists == false
+
+- name: ensure runlevel
+  command: "update-rc.d archivesspace defaults"
+
+- name: Ensure that archivesspace is started
+  command: /etc/init.d/archivesspace start
+
+- name: Ensure that backup dir exists
+  file:
+    state: directory
+    path: /backup

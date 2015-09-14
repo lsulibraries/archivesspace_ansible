@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - common
+    - ansible-role-git
+    - ansible-role-mysql
+    - ansible-role-java
+    - archivesspace

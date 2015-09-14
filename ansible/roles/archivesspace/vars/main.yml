@@ -1,0 +1,4 @@
+archivesspace_version: v1.3.0
+archivesspace_target: /opt
+archivesspace_home: "{{ archivesspace_target }}/archivesspace"
+jdbc_version: 5.1.36
