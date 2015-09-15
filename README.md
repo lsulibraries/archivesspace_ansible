@@ -4,13 +4,14 @@ sets up archivespace as a dev environment
 - [vagrant](https://www.vagrantup.com/downloads.html)
 - [virtualbox](http://www.oracle.com/technetwork/server-storage/virtualbox/downloads/index.html)
 - a terminal
+- git
   
-## Windows prerequisites
+## Windows users
 Windows users will need to obtain a linux-style terminal.
-The one provided with [Git for Windows](https://git-scm.com/downloads) works well; just be sure to install the 'git bash' component.
+Kill two birds with one stone by installing [Git for Windows](https://git-scm.com/downloads); just be sure to install the 'git bash' component.
 
 ## Installation (dev box)
-- launch your terminal
+- open a terminal (git bash, on Windows)
 - `git clone --recursive https://github.com/lsulibraries/archivesspace_ansible.git`
 - `cd archivesspace_ansible`
 - `vagrant up`
@@ -23,6 +24,9 @@ When the installation finishes, you should see output similar to the following:
 	==> default: localhost                  : ok=38   changed=23   unreachable=0    failed=0
 	
 While the installation will have finished, the application takes a minute or two to initialize.
+
+
+## for the adventurous, a journey into the very dark place...
 
 You can monitor its progress by tailing the archivespace log in the vm with `less`.
 - `vagrant ssh`
