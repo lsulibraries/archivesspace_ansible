@@ -74,8 +74,20 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "ansible/site.yml"
-    ansible.extra_vars = "ansible/vars"
+  # Use rbconfig to determine if we're on a windows host or not.
+  require 'rbconfig'
+  is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+  if is_windows
+    # Provisioning configuration for shell script.
+    config.vm.provision "shell" do |sh|
+      sh.path = "ansible/JJG-Ansible-Windows/windows.sh"
+      sh.args = "ansible/site.yml"
+    end
+  else
+    # Provisioning configuration for Ansible (for Mac/Linux hosts).
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible/site.yml"
+      ansible.extra_vars = "ansible/vars"
+    end
   end
 end
