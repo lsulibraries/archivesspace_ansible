@@ -1,6 +1,8 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - vars
   roles:
     - common
     - ansible-role-git
