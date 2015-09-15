@@ -5,11 +5,15 @@
   register: src_exists
 
 - name: Get archivesspace
-  unarchive: 
-    src: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
-    copy: no
+  get_url: 
+    url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
     dest: "{{ archivesspace_target }}"
   when: src_exists.stat.exists == false
+
+- name: Unzip AS
+  unarchive:
+    src: "{{ archivesspace_target}}/archivesspace-{{archivesspace_version}}.zip"
+    dest: "{{ archivesspace_target}}" 
 
 - name: Get mysql connector
   get_url: 
