@@ -14,3 +14,5 @@ mysql_users:
     host: "{{ mysql_host }}"
     password: "{{ mysql_pass }}"
     priv: "{{ mysql_db }}.*:ALL"
+
+admin_network: 0/0
