@@ -1,0 +1,9 @@
+---
+# default cron configuration
+automysqlbackup_cron:
+  minute: "0"
+  hour: "0"
+  day: "*"
+  month: "*"
+  weekday: "*"
+
