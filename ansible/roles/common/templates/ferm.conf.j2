@@ -1,0 +1,44 @@
+# -*- shell-script -*-
+#
+#  Configuration file for ferm(1).
+#
+
+table filter {
+    chain INPUT {
+        policy DROP;
+
+        # connection tracking
+        mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+
+        # allow local packet
+        interface lo ACCEPT;
+
+        # respond to ping
+        proto icmp ACCEPT; 
+
+        # allow IPsec
+        proto udp dport 500 ACCEPT;
+        proto (esp ah) ACCEPT;
+
+        # allow SSH connections
+        saddr {{ admin_network }} proto tcp dport ssh ACCEPT;
+
+	# our services to the world
+        proto tcp dport (8080 8081 8090 8089) ACCEPT;
+    }
+    chain OUTPUT {
+        policy ACCEPT;
+
+        # connection tracking
+        #mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+    }
+    chain FORWARD {
+        policy DROP;
+
+        # connection tracking
+        mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+    }
+}
