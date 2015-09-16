@@ -11,3 +11,6 @@
 [submodule "ansible/JJG-Ansible-Windows"]
 	path = ansible/JJG-Ansible-Windows
 	url = https://github.com/geerlingguy/JJG-Ansible-Windows.git
+[submodule "ansible/roles/ansible-automysqlbackup"]
+	path = ansible/roles/ansible-automysqlbackup
+	url = https://github.com/MaximeThoonsen/ansible-automysqlbackup-role.git
