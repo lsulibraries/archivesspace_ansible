@@ -10,10 +10,16 @@
     dest: "{{ archivesspace_target }}"
   when: src_exists.stat.exists == false
 
+- name: check if unzipped yet
+  stat:
+    path: "{{ archivesspace_home }}"
+  register: unzipped
+
 - name: Unzip AS
   unarchive:
     src: "{{ archivesspace_target}}/archivesspace-{{archivesspace_version}}.zip"
     dest: "{{ archivesspace_target}}" 
+  when: unzipped.stat.exists == false
 
 - name: Get mysql connector
   get_url: 
