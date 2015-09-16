@@ -7,3 +7,23 @@
   with_items:
     - htop
     - unzip
+    - emacs
+
+- name: install ferm
+  apt:
+    name: ferm
+    force: yes
+    cache_valid_time: 86400
+
+- name: set iptables conf
+  template: 
+    src: ferm.conf.j2
+    dest: /etc/ferm/ferm.conf
+    owner: root
+    group: root
+
+- name: Enable ferm
+  lineinfile:
+    regexp: 'ENABLED="no"'
+    line: 'ENABLED="yes"'
+    dest: /etc/default/ferm
