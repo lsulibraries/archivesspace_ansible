@@ -18,7 +18,8 @@
 - name: Unzip AS
   unarchive:
     src: "{{ archivesspace_target}}/archivesspace-{{archivesspace_version}}.zip"
-    dest: "{{ archivesspace_target}}" 
+    dest: "{{ archivesspace_target}}"
+    copy: no
   when: unzipped.stat.exists == false
 
 - name: Get mysql connector
