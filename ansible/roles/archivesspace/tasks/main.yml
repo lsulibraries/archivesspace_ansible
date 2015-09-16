@@ -51,8 +51,14 @@
 - name: ensure runlevel
   command: "update-rc.d archivesspace defaults"
 
-- name: Ensure that archivesspace is started
-  command: /etc/init.d/archivesspace start
+#- name: Ensure that archivesspace is started
+#  command: /etc/init.d/archivesspace start
+
+- name: Start the app
+  service: 
+    name:    archivesspace
+    state:   started
+    enabled: yes
 
 - name: Ensure that backup dir exists
   file:
