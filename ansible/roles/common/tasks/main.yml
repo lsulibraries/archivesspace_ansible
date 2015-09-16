@@ -15,6 +15,12 @@
     force: yes
     cache_valid_time: 86400
 
+- name: Enable ferm
+  lineinfile:
+    regexp: 'ENABLED="no"'
+    line: 'ENABLED="yes"'
+    dest: /etc/default/ferm
+
 - name: set iptables conf
   template: 
     src: ferm.conf.j2
@@ -22,8 +28,5 @@
     owner: root
     group: root
 
-- name: Enable ferm
-  lineinfile:
-    regexp: 'ENABLED="no"'
-    line: 'ENABLED="yes"'
-    dest: /etc/default/ferm
+- name: Load iptables configuration
+  command: ferm /etc/ferm/ferm.conf
