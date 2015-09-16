@@ -5,7 +5,9 @@
     - vars
   roles:
     - common
+#    - iptables
     - ansible-role-git
     - ansible-role-mysql
     - ansible-role-java
     - archivesspace
+    - ansible-automysqlbackup
