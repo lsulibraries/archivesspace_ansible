@@ -9,3 +9,12 @@
     - ansible-role-java
     - archivesspace
     - ansible-automysqlbackup
+
+  vars_prompt:
+    - name: admin_network
+      prompt: "Enter admin network that should be allowed ssh access:"
+      default: 0/0
+
+    - name: mysql_root_password
+      prompt: "mysql root password"
+      default: root

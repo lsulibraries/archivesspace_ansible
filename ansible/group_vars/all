@@ -22,4 +22,4 @@ mysql_users:
     password: "{{ mysql_pass }}"
     priv: "{{ mysql_db }}.*:ALL"
 
-admin_network: 0/0
+
