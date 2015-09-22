@@ -1,2 +1,2 @@
 ---
-admin_network: 130.39.0.0/16
+admin_network: 130.39.60.0/22
