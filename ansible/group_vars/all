@@ -7,3 +7,19 @@ automysqlbackup_cron:
   month: "*"
   weekday: "*"
 
+mysql_user: as
+mysql_pass: pass
+mysql_db: archivesspace
+mysql_host: localhost
+
+mysql_databases:
+  - name: "{{ mysql_db }}"
+    encoding: utf8
+    collation: utf8_general_ci
+mysql_users:
+  - name: "{{ mysql_user }}"
+    host: "{{ mysql_host }}"
+    password: "{{ mysql_pass }}"
+    priv: "{{ mysql_db }}.*:ALL"
+
+admin_network: 0/0
