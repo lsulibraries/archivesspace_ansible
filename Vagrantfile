@@ -87,7 +87,6 @@ Vagrant.configure(2) do |config|
     # Provisioning configuration for Ansible (for Mac/Linux hosts).
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/site.yml"
-      ansible.extra_vars = "ansible/vars"
     end
   end
 end
