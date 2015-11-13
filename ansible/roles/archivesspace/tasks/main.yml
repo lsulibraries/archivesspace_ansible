@@ -54,6 +54,9 @@
 #- name: Ensure that archivesspace is started
 #  command: /etc/init.d/archivesspace start
 
+# setup Jasper reporting
+- include: jasper.yml
+
 - name: Start the app
   service: 
     name:    archivesspace

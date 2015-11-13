@@ -1,0 +1,50 @@
+---
+- name: update config.rb - enable jasper
+  lineinfile:
+    line: "AppConfig[:enable_jasper] = true"
+    state: present
+    insertafter: "#AppConfig[:enable_jasper] = true"
+    dest: "{{ archivesspace_home}}/config/config.rb"
+
+- name: update config.rb - compile jasper
+  lineinfile:
+    line: "AppConfig[:compile_jasper] = true"
+    state: present
+    insertafter: "#AppConfig[:compile_jasper] = false"
+    dest: "{{ archivesspace_home}}/config/config.rb"
+
+# From http://www.stefanwienert.de/blog/2014/08/29/ansible-enable-ubuntu-multiverse-and-install-mscorefonts/
+
+- apt_repository:
+    repo: "{{item}}"
+  register: multiverse_installed
+#  update_cache: false  # We will do ourselfs afterwards
+  when: ansible_distribution == 'Ubuntu'
+  with_items:
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+
+- apt:
+    update_cache: true
+  when: multiverse_installed | changed
+
+- apt:
+    name: '{{item}}'
+  with_items:
+    - libfreetype6
+    - libfreetype6-dev
+    - libfontconfig
+
+- name: 'Accept License'
+  shell: 'echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections'
+
+- apt: name=ttf-mscorefonts-installer
+# end from http://www.stefanwienert.de/blog/2014/08/29/ansible-enable-ubuntu-multiverse-and-install-mscorefonts/
+
+- name: update java env vars
+  lineinfile:
+    line: "JAVA_FONTS=/usr/share/fonts/truetype"
+    state: present
+    dest: "/etc/environment"
