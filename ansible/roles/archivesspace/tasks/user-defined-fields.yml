@@ -1,0 +1,35 @@
+---
+- name: update user-defined fields
+  lineinfile:
+    state: present
+    regexp: "    real_1: Real 1"
+    line: "    real_1: Purchase Price"
+    dest: "{{ archivesspace_home}}/locales/en.yml"
+
+- name: update user-defined fields
+  lineinfile:
+    state: present
+    regexp: "    string_1: String 1"
+    line: "    string_1: Mss. Number"
+    dest: "{{ archivesspace_home}}/locales/en.yml"
+
+- name: update user-defined fields
+  lineinfile:
+    state: present
+    regexp: "    string_2: String 2"
+    line: "    string_2: Location"
+    dest: "{{ archivesspace_home}}/locales/en.yml"
+
+- name: update user-defined fields
+  lineinfile:
+    state: present
+    regexp: "    string_3: String 3"
+    line: "    string_3: SIRSI Number"
+    dest: "{{ archivesspace_home}}/locales/en.yml"
+
+- name: update user-defined fields
+  lineinfile:
+    state: present
+    regexp: "    date_1: Date 1"
+    line: "    date_1: Date Received"
+    dest: "{{ archivesspace_home}}/locales/en.yml"
