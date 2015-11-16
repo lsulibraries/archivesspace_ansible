@@ -65,6 +65,10 @@
   environment: 
     JAVA_FONTS: /usr/share/fonts/truetype
 
+- wait_for: 
+    port: 8080
+    delay: 30
+
 - name: Ensure that backup dir exists
   file:
     state: directory
