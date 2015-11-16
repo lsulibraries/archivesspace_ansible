@@ -11,6 +11,7 @@ mysql_user: as
 mysql_pass: pass
 mysql_db: archivesspace
 mysql_host: localhost
+mysql_root_password: root
 
 mysql_databases:
   - name: "{{ mysql_db }}"
@@ -21,5 +22,3 @@ mysql_users:
     host: "{{ mysql_host }}"
     password: "{{ mysql_pass }}"
     priv: "{{ mysql_db }}.*:ALL"
-
-
