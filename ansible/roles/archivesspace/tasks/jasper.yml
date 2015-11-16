@@ -3,14 +3,14 @@
   lineinfile:
     line: "AppConfig[:enable_jasper] = true"
     state: present
-    insertafter: "#AppConfig[:enable_jasper] = true"
+    insertafter: '#AppConfig[:enable_jasper] = true'
     dest: "{{ archivesspace_home}}/config/config.rb"
 
 - name: update config.rb - compile jasper
   lineinfile:
     line: "AppConfig[:compile_jasper] = true"
     state: present
-    insertafter: "#AppConfig[:compile_jasper] = false"
+    insertafter: '#AppConfig[:compile_jasper] = false'
     dest: "{{ archivesspace_home}}/config/config.rb"
 
 # From http://www.stefanwienert.de/blog/2014/08/29/ansible-enable-ubuntu-multiverse-and-install-mscorefonts/
