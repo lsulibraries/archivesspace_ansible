@@ -1,7 +1,7 @@
 ---
 - name: src exists
   stat:
-    path: "{{ archivesspace_home }}/config/config.rb"
+    path: "{{ archivesspace_target }}/archivesspace-{{archivesspace_version}}.zip"
   register: src_exists
 
 - name: Get archivesspace
@@ -15,11 +15,39 @@
     path: "{{ archivesspace_home }}"
   register: unzipped
 
+- name: ensure archivesspace home exists
+  file:
+    path: "{{ archivesspace_home }}"
+    state: directory
+
 - name: Unzip AS
   unarchive:
     src: "{{ archivesspace_target}}/archivesspace-{{archivesspace_version}}.zip"
-    dest: "{{ archivesspace_target}}"
+    dest: "{{ archivesspace_home }}"
     copy: no
+  when: unzipped.stat.exists == false
+
+- name: register stat for aspace_current
+  stat: 
+    path: "{{ archivesspace_current }}"
+  register: aspace_link
+
+- name: Check if link exists
+  stat: 
+    path: "{{ archivesspace_current }}"
+  register: apace_link_iscorrect
+  when: aspace_link.stat.islnk is defined and aspace_link.stat.islnk
+
+#- name: Check if link exists
+#  stat: 
+#    path: "{{ archivesspace_current }}"
+#  register: apace_link_iscorrect
+#  when: aspace_link.stat.islnks is defined 
+
+- name: Stop archivesspace before upgrade
+  service:
+    name: archivesspace
+    state: stopped
   when: unzipped.stat.exists == false
 
 # Setup user-defined fields
@@ -45,11 +73,27 @@
     path: /etc/init.d/archivesspace
   register: init_exists
 
+- name: migrate data
+  command: "cp -rL {{ archivesspace_current }}/{{ item }}/ {{ archivesspace_home }}/{{ item }}"
+  with_items:
+    - data
+
+- name: Remove old symlink
+  file:
+    path: "{{ archivesspace_current }}"
+    state: absent
+  when: "aspace_link.stat.islnk is defined and aspace_link.stat.islnk == false or aspace_link.stat.lnk_source != '{{ archivesspace_home }}'"
+
+- name: Ensure symlink exists
+  file:
+    path: "{{ archivesspace_current }}"
+    src: "{{ archivesspace_home }}"
+    state: link
+
 - name: setup init script
-  command: "ln -s {{ archivesspace_home }}/archivesspace.sh /etc/init.d/archivesspace"
-  args:
-    creates: "{{ archivesspace_home }}/archivesspace.sh /etc/init.d/archivesspace"
-  when: init_exists.stat.exists == false
+  file: 
+    path: "/etc/init.d/archivesspace"
+    src:  "{{ archivesspace_current }}/archivesspace.sh"
 
 - name: ensure runlevel
   command: "update-rc.d archivesspace defaults"
