@@ -9,6 +9,7 @@
     - unzip
     - emacs
     - ntp
+    - tree
 
 - name: install ferm
   apt:
