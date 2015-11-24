@@ -1,35 +1,35 @@
 ---
 - name: src exists
   stat:
-    path: "{{ archivesspace_target }}/archivesspace-{{archivesspace_version}}.zip"
+    path: "{{ archivesspace_root }}/archivesspace-{{archivesspace_version}}.zip"
   register: src_exists
 
 - name: Get archivesspace
   get_url: 
     url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
-    dest: "{{ archivesspace_target }}"
+    dest: "{{ archivesspace_root }}"
   when: src_exists.stat.exists == false
 
 - name: check if unzipped yet
   stat:
-    path: "{{ archivesspace_home }}"
+    path: "{{ archivesspace_unzip_target }}"
   register: unzipped
 
 - name: ensure archivesspace home exists
   file:
-    path: "{{ archivesspace_home }}"
+    path: "{{ archivesspace_unzip_target }}"
     state: directory
 
 - name: Unzip AS
   unarchive:
-    src: "{{ archivesspace_target}}/archivesspace-{{archivesspace_version}}.zip"
-    dest: "{{ archivesspace_home }}"
+    src: "{{ archivesspace_root}}/archivesspace-{{archivesspace_version}}.zip"
+    dest: "{{ archivesspace_unzip_target }}"
     copy: no
   when: unzipped.stat.exists == false
 
 - name: register stat for aspace_current
   stat: 
-    path: "{{ archivesspace_current }}"
+    path: "{{ archivesspace_home }}"
   register: aspace_link
 
 - name: Check if link exists
@@ -56,44 +56,48 @@
 - name: Get mysql connector
   get_url: 
     url: "http://central.maven.org/maven2/mysql/mysql-connector-java/{{ jdbc_version }}/mysql-connector-java-{{ jdbc_version }}.jar"
-    dest: "{{ archivesspace_home }}/lib/"
+    dest: "{{ archivesspace_src }}/lib/"
+  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
 - name: configure connector
   lineinfile:
     state: present
     line: "AppConfig[:db_url] = \"jdbc:mysql://{{ mysql_host }}:3306/archivesspace?user={{ mysql_user }}&password={{ mysql_pass }}&useUnicode=true&characterEncoding=UTF-8\""
     insertafter: EOF
-    dest: "{{ archivesspace_home }}/config/config.rb"
+    dest: "{{ archivesspace_src }}/config/config.rb"
+  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
     
 - name: run db insert script
-  command: "sh {{ archivesspace_home }}/scripts/setup-database.sh"
+  command: "sh {{ archivesspace_src }}/scripts/setup-database.sh"
+  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
 - name: check init script exists
   stat: 
     path: /etc/init.d/archivesspace
   register: init_exists
 
-- name: migrate data
-  command: "cp -rL {{ archivesspace_current }}/{{ item }}/ {{ archivesspace_home }}/{{ item }}"
-  with_items:
-    - data
+#- name: migrate data
+#  command: "cp -rL {{ archivesspace_home }}/{{ item }}/ {{ archivesspace_src }}/{{ item }}"
+#  with_items:
+#    - data
+#  when: "aspace_link.stat.islnk is not defined or aspace_link.stat.lnk_source != {{ archivesspace_src }}"
 
 - name: Remove old symlink
   file:
-    path: "{{ archivesspace_current }}"
+    path: "{{ archivesspace_home }}"
     state: absent
   when: "aspace_link.stat.islnk is defined and aspace_link.stat.islnk == false or aspace_link.stat.lnk_source != '{{ archivesspace_home }}'"
 
 - name: Ensure symlink exists
   file:
-    path: "{{ archivesspace_current }}"
-    src: "{{ archivesspace_home }}"
+    path: "{{ archivesspace_home }}"
+    src: "{{ archivesspace_src }}"
     state: link
 
 - name: setup init script
   file: 
     path: "/etc/init.d/archivesspace"
-    src:  "{{ archivesspace_current }}/archivesspace.sh"
+    src:  "{{ archivesspace_home }}/archivesspace.sh"
 
 - name: ensure runlevel
   command: "update-rc.d archivesspace defaults"
