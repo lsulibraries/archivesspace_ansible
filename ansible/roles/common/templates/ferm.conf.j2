@@ -25,10 +25,10 @@ table filter {
         saddr {{ admin_network }} proto tcp dport ssh ACCEPT;
 
 	# our services to the world
-        proto tcp dport (8080) ACCEPT;
+        proto tcp dport (80) ACCEPT;
 
 	# private http services
-	saddr {{ admin_network }} proto tcp dport (8090 8081 8089) ACCEPT;
+	saddr {{ admin_network }} proto tcp dport (8080 8090 8081 8089) ACCEPT;
     }
     chain OUTPUT {
         policy ACCEPT;

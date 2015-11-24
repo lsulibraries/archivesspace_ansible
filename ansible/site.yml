@@ -3,7 +3,7 @@
   become: true
   roles:
     - common
-#    - iptables
+    - ansible-role-apache
     - ansible-role-git
     - ansible-role-mysql
     - ansible-role-java

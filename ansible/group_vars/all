@@ -22,3 +22,19 @@ mysql_users:
     host: "{{ mysql_host }}"
     password: "{{ mysql_pass }}"
     priv: "{{ mysql_db }}.*:ALL"
+
+apache_listen_port: 80
+apache_create_vhosts: true
+apache_vhosts_filename: "vhosts.conf"
+apache_remove_default_vhost: true
+apache_mods_enabled:
+  - proxy.load
+  - proxy_http.load
+
+apache_vhosts:
+  - servername: "aspace.lib.lsu.edu"
+    documentroot: "/var/www/html"
+    extra_parameters: |
+      ProxyPreserveHost On
+      ProxyPass / http://localhost:8080/
+      ProxyPassReverse / http://localhost:8080/
