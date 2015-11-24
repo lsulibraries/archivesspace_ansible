@@ -32,23 +32,27 @@
     path: "{{ archivesspace_home }}"
   register: aspace_link
 
-- name: Check if link exists
-  stat: 
-    path: "{{ archivesspace_current }}"
-  register: apace_link_iscorrect
-  when: aspace_link.stat.islnk is defined and aspace_link.stat.islnk
-
-#- name: Check if link exists
+#- name: Check if link points to this version
 #  stat: 
-#    path: "{{ archivesspace_current }}"
-#  register: apace_link_iscorrect
-#  when: aspace_link.stat.islnks is defined 
+#    path: "{{ archivesspace_home }}"
+#  register: apace_upgrade
+#  when: aspace_link.stat.islnks is defined
 
-- name: Stop archivesspace before upgrade
-  service:
-    name: archivesspace
-    state: stopped
-  when: unzipped.stat.exists == false
+#- name: Stop archivesspace before upgrade
+#  service:
+#    name: archivesspace
+#    state: stopped
+#  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
+
+- name: kill archivesspace
+  command: service archivesspace stop
+  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
+
+- wait_for: 
+    port: 8080
+    delay: 90
+    state: absent
+  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
 # Setup user-defined fields
 - include: user-defined-fields.yml
@@ -82,17 +86,18 @@
 #    - data
 #  when: "aspace_link.stat.islnk is not defined or aspace_link.stat.lnk_source != {{ archivesspace_src }}"
 
-- name: Remove old symlink
+- name: Remove initial directory
   file:
     path: "{{ archivesspace_home }}"
     state: absent
-  when: "aspace_link.stat.islnk is defined and aspace_link.stat.islnk == false or aspace_link.stat.lnk_source != '{{ archivesspace_home }}'"
+  when: aspace_link.stat.isdir == true
 
 - name: Ensure symlink exists
   file:
     path: "{{ archivesspace_home }}"
     src: "{{ archivesspace_src }}"
     state: link
+    force: true
 
 - name: setup init script
   file: 

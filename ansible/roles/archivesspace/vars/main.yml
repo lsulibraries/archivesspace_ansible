@@ -1,5 +1,6 @@
 archivesspace_version: v1.4.2
-archivesspace_target: /opt
-archivesspace_home: "{{ archivesspace_target}}/archivesspace-{{ archivesspace_version }}/archivesspace"
-archivesspace_current: "{{ archivesspace_target}}/archivesspace"
+archivesspace_root: /opt
+archivesspace_unzip_target: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}"
+archivesspace_src: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}/archivesspace"
+archivesspace_home: "{{ archivesspace_root}}/archivesspace"
 jdbc_version: 5.1.36
