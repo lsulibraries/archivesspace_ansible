@@ -94,6 +94,7 @@
 #    - data
 #  when: "aspace_link.stat.islnk is not defined or aspace_link.stat.lnk_source != {{ archivesspace_src }}"
 
+# this can go after the upgrade to 142 on prod and staging
 - name: Remove initial directory
   file:
     path: "{{ archivesspace_home }}"
