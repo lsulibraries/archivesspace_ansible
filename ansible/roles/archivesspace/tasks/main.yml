@@ -63,6 +63,15 @@
     dest: "{{ archivesspace_src }}/lib/"
   when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
+# @TODO may need to define an archivesspace restart handler to pickup changes here
+# @TODO also figure out how to prevent lineinfiles from going to EOF
+- name: Set log level
+  lineinfile:
+    state: present
+    line: 'AppConfig[:backend_log_level] = "warn"'
+    insertafter: '#AppConfig[:backend_log_level] = "debug"'
+    dest: "{{ archivesspace_src }}/config/config.rb"
+
 - name: configure connector
   lineinfile:
     state: present
