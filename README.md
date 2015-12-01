@@ -21,6 +21,7 @@ Kill two birds with one stone by installing [Git for Windows](https://git-scm.co
 - be sure to provide commandline --extra_vars values for 
   - `admin_network` - default is '0/0', all networks
   - `mysql_root_password` - default is 'root'
+  - `archivesspace_hostname` - default is localhost; used for apache vhost configuration of the `Servername` parameter.
 
 In either case, the installation process will take about 5-6 minutes during which you will see the output of the installation process scroll by in your terminal.
 When the installation finishes, you should see output similar to the following:

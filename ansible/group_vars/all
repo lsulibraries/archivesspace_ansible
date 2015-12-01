@@ -23,6 +23,8 @@ mysql_users:
     password: "{{ mysql_pass }}"
     priv: "{{ mysql_db }}.*:ALL"
 
+archivesspace_hostname: localhost
+
 apache_listen_port: 80
 apache_create_vhosts: true
 apache_vhosts_filename: "vhosts.conf"
@@ -32,7 +34,7 @@ apache_mods_enabled:
   - proxy_http.load
 
 apache_vhosts:
-  - servername: "aspace.lib.lsu.edu"
+  - servername: "{{ archivesspace_hostname }}"
     documentroot: "/var/www/html"
     extra_parameters: |
       ProxyPreserveHost On
