@@ -27,6 +27,13 @@
     copy: no
   when: unzipped.stat.exists == false
 
+- name: make symlink
+  file:
+    path: "{{ archivesspace_home }}"
+    src: "{{ archivesspace_unzip_target }}"
+    state: link
+    
+
 - name: register stat for aspace_current
   stat: 
     path: "{{ archivesspace_home }}"
@@ -44,9 +51,14 @@
 #    state: stopped
 #  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
+- name: service exists ?
+  stat:
+    path: /etc/init.d/archivesspace
+  register: service_exists
+
 - name: kill archivesspace
   command: service archivesspace stop
-  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
+  when: "service_exists.stat.exists == true and (aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}'))"
 
 - wait_for: 
     port: 8080
