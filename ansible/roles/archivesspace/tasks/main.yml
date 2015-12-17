@@ -30,7 +30,7 @@
 - name: make symlink
   file:
     path: "{{ archivesspace_home }}"
-    src: "{{ archivesspace_unzip_target }}"
+    src: "{{ archivesspace_unzip_target }}/archivesspace"
     state: link
     
 
