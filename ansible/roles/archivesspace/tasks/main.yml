@@ -32,7 +32,7 @@
     path: "{{ archivesspace_home }}"
     src: "{{ archivesspace_unzip_target }}/archivesspace"
     state: link
-    
+    force: yes
 
 - name: register stat for aspace_current
   stat: 
@@ -73,7 +73,6 @@
   get_url: 
     url: "http://central.maven.org/maven2/mysql/mysql-connector-java/{{ jdbc_version }}/mysql-connector-java-{{ jdbc_version }}.jar"
     dest: "{{ archivesspace_src }}/lib/"
-  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
 # @TODO may need to define an archivesspace restart handler to pickup changes here
 # @TODO also figure out how to prevent lineinfiles from going to EOF
@@ -93,7 +92,7 @@
     
 - name: run db insert script
   command: "sh {{ archivesspace_src }}/scripts/setup-database.sh"
-  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
+#  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
 - name: check init script exists
   stat: 
@@ -124,6 +123,7 @@
   file: 
     path: "/etc/init.d/archivesspace"
     src:  "{{ archivesspace_home }}/archivesspace.sh"
+    state: link
 
 - name: ensure runlevel
   command: "update-rc.d archivesspace defaults"
