@@ -14,3 +14,6 @@
 [submodule "ansible/roles/ansible-role-apache"]
 	path = ansible/roles/ansible-role-apache
 	url = https://github.com/geerlingguy/ansible-role-apache.git
+[submodule "ansible/roles/ansible-automysqlbackup-role"]
+	path = ansible/roles/ansible-automysqlbackup-role
+	url = https://github.com/lsulibraries/ansible-automysqlbackup-role.git
