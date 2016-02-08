@@ -40,3 +40,7 @@ apache_vhosts:
       ProxyPreserveHost On
       ProxyPass / http://localhost:8080/
       ProxyPassReverse / http://localhost:8080/
+
+automysqlbackup_dbexclude: "information_schema"
+automysqlbackup_dump_full_schema: yes
+automysqlbackup_mailcontent: stdout
