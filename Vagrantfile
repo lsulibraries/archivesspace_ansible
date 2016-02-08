@@ -24,12 +24,19 @@ Vagrant.configure(2) do |config|
     # Provisioning configuration for shell script.
     config.vm.provision "shell" do |sh|
       sh.path = "ansible/JJG-Ansible-Windows/windows.sh"
-      sh.args = "ansible/site.yml"
+      sh.args = "ansible/local.play"
     end
   else
     # Provisioning configuration for Ansible (for Mac/Linux hosts).
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/site.yml"
+      ansible.playbook = "ansible/local.play"
+      ansible.verbose = 'vv'
+      ansible.extra_vars = {
+        aws_access_key_id: xxxxxxxxxxxxxxxxxxxxxx
+        aws_secret_access_key: yyyyyyyyyyyyyyyyyyyy
+        bucket: mybucket
+        fetch_data: True
+      }
     end
   end
 end
