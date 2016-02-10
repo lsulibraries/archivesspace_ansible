@@ -93,7 +93,7 @@
         month: "{{ automysqlbackup_cron.month }}"
         weekday: "{{ automysqlbackup_cron.weekday }}"
         user: root
-        job: "aws s3 sync /var/lib/automysqlbackup/ s3://{{ bucket }}"
+        job: "/usr/locl/bin/aws s3 sync /var/lib/automysqlbackup/ s3://{{ bucket }}"
 
     # todo: install postfix as internet site...
     - name: Move cert into place
