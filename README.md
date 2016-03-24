@@ -11,13 +11,14 @@ Windows users will need to obtain a linux-style terminal.
 Kill two birds with one stone by installing [Git for Windows](https://git-scm.com/downloads); just be sure to install the 'git bash' component.
 
 ## Importing data
-You can optionally import data from an S3 bucket; this build fetches data by default. You can negate this behavior by setting the variable `fetch_data` to `False` in the file `local.play`, as in: 
+You can optionally import data from an S3 bucket using credentials found in a file called aws_secrets. 
+To enable data import, edit the file `local.play`, setting the variable `fetch_data` to `True`, 
 
 ~~~
-fetch_data: False
+fetch_data: True
 ~~~
 
-When set to true, the build will look for S3 credentials in a file called `aws_secrets`. An example `aws_secrets.example` is provided; replace the values in that file with your own, and 'save as' `aws_secrets`.
+and replace the values in aws_secrets.example with your own, saving as `aws_secrets`.
 
 ## Installation (dev box)
 - open a terminal (git bash, on Windows)
