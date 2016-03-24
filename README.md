@@ -11,7 +11,8 @@ Windows users will need to obtain a linux-style terminal.
 Kill two birds with one stone by installing [Git for Windows](https://git-scm.com/downloads); just be sure to install the 'git bash' component.
 
 ## Importing data
-You can optionally import data from an S3 bucket using credentials found in a file called aws_secrets. 
+You can optionally import mysql data from an S3 bucket using credentials found in a file called aws_secrets. 
+The expected mysqldump location is `s3://{{ bucket }}/latest/daily_archivesspace.sql.gz`.
 To enable data import, edit the file `local.play`, setting the variable `fetch_data` to `True`, 
 
 ~~~
