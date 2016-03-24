@@ -15,56 +15,14 @@
     fetch_data: True
 
   tasks:
-    - name: get pip
-      apt:
-        name: python-pip
-      when: fetch_data == 'True'
-
-    - name: get mysql lib
-      apt:
-        name: python-mysqldb
-      when: fetch_data == 'True'
-
-    - name: get aws cli
-      pip:
-        name: awscli
-      when: fetch_data == 'True'
-
-    - name: make aws config dir
-      file:
-        path: /root/.aws
-        state: directory
-      when: fetch_data == 'True'
-
-    - name: configure aws cli
-      template:
-        src: templates/awsconfig.j2
-        dest: /root/.aws/config
-      when: fetch_data == 'True'
-
-    - name: get latest db from s3
-      command: "aws s3 cp s3://{{ bucket }}/latest/daily_archivesspace.sql.gz /opt/"
-      when: fetch_data == 'True'
-
-    - name: import db
-      mysql_db:
-        target: /opt/daily_archivesspace.sql.gz
-        db: archivesspace
-        config_file: /root/.my.cnf
-        state: import
-      when: fetch_data == 'True'
-
-    - name: restart archivesspace
-      service: 
-        name: archivesspace
-        state: restarted
-        sleep: 30
-      when: fetch_data == 'True'
+    - include: fetch_data.yml
+      when: fetch_data == True
 
     - name: restart apache
       service: 
         name: apache2
         state: restarted
-      
+
   vars_files: 
     - group_vars/local
+    - ['aws_secrets', 'aws_secrets.example']
