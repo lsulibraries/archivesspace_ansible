@@ -10,6 +10,15 @@ sets up archivespace as a dev environment
 Windows users will need to obtain a linux-style terminal.
 Kill two birds with one stone by installing [Git for Windows](https://git-scm.com/downloads); just be sure to install the 'git bash' component.
 
+## Importing data
+You can optionally import data from an S3 bucket; this build fetches data by default. You can negate this behavior by setting the variable `fetch_data` to `False` in the file `local.play`, as in: 
+
+~~~
+fetch_data: False
+~~~
+
+When set to true, the build will look for S3 credentials in a file called `aws_secrets`. An example `aws_secrets.example` is provided; replace the values in that file with your own, and 'save as' `aws_secrets`.
+
 ## Installation (dev box)
 - open a terminal (git bash, on Windows)
 - `git clone --recursive https://github.com/lsulibraries/archivesspace_ansible.git`
