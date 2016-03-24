@@ -31,12 +31,6 @@ Vagrant.configure(2) do |config|
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/local.play"
       ansible.verbose = 'vv'
-      ansible.extra_vars = {
-        aws_access_key_id: xxxxxxxxxxxxxxxxxxxxxx
-        aws_secret_access_key: yyyyyyyyyyyyyyyyyyyy
-        bucket: mybucket
-        fetch_data: True
-      }
     end
   end
 end
