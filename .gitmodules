@@ -8,9 +8,6 @@
 [submodule "ansible/roles/ansible-role-mysql"]
 	path = ansible/roles/ansible-role-mysql
 	url = https://github.com/geerlingguy/ansible-role-mysql.git
-[submodule "ansible/JJG-Ansible-Windows"]
-	path = ansible/JJG-Ansible-Windows
-	url = https://github.com/geerlingguy/JJG-Ansible-Windows.git
 [submodule "ansible/roles/ansible-role-apache"]
 	path = ansible/roles/ansible-role-apache
 	url = https://github.com/geerlingguy/ansible-role-apache.git
