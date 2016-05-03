@@ -15,8 +15,6 @@
     fetch_data: False
 
   tasks:
-    - include: fetch_data.yml
-      when: fetch_data == True
 
     - name: restart apache
       service: 

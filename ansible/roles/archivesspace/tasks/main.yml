@@ -89,7 +89,10 @@
     line: "AppConfig[:db_url] = \"jdbc:mysql://{{ mysql_host }}:3306/archivesspace?user={{ mysql_user }}&password={{ mysql_pass }}&useUnicode=true&characterEncoding=UTF-8\""
     insertafter: EOF
     dest: "{{ archivesspace_src }}/config/config.rb"
-    
+
+- include: fetch_data.yml
+  when: fetch_data == True
+
 - name: run db insert script
   command: "sh {{ archivesspace_src }}/scripts/setup-database.sh"
 #  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
