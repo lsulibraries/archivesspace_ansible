@@ -9,14 +9,11 @@
     - ansible-role-java
     - archivesspace
     - ansible-automysqlbackup-role
-
   vars:
     ## set this to False to skip the import of remote data (see file aws_secrets.example)
-    fetch_data: False
+    fetch_data: True
 
   tasks:
-    - include: fetch_data.yml
-      when: fetch_data == True
 
     - name: restart apache
       service: 
