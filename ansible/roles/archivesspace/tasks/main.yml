@@ -91,7 +91,7 @@
     dest: "{{ archivesspace_src }}/config/config.rb"
 
 - include: fetch_data.yml
-  when: fetch_data == True
+  when: fetch_data
 
 - name: run db insert script
   command: "sh {{ archivesspace_src }}/scripts/setup-database.sh"
