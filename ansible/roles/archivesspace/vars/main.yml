@@ -1,4 +1,4 @@
-archivesspace_version: v1.4.2
+archivesspace_version: v1.5.0-rc1
 archivesspace_root: /opt
 archivesspace_unzip_target: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}"
 archivesspace_src: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}/archivesspace"
