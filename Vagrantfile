@@ -30,7 +30,9 @@ Vagrant.configure(2) do |config|
     # Provisioning configuration for Ansible (for Mac/Linux hosts).
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/local.play"
-      ansible.verbose = 'vv'
+      ansible.verbose = 'vv',
+      fetch_data: 'False',
+      upgrade: 'True'
     end
   end
 end
