@@ -1,28 +1,18 @@
 ---
-- name: src exists
-  stat:
-    path: "{{ archivesspace_root }}/archivesspace-{{archivesspace_version}}.zip"
-  register: src_exists
 
-- name: Get archivesspace
-  get_url: 
-    url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
-    dest: "{{ archivesspace_root }}"
-  when: src_exists.stat.exists == false
-
-- name: check if unzipped yet
+- name: Check if we have already fetched the source for this version.
   stat:
-    path: "{{ archivesspace_unzip_target }}"
+    path: "{{ archivesspace_unzip_target }}/archivesspace"
   register: unzipped
 
-- name: ensure archivesspace home exists
+- name: Ensure Aspace home directory exists.
   file:
     path: "{{ archivesspace_unzip_target }}"
     state: directory
 
 - name: Unzip AS
   unarchive:
-    src: "{{ archivesspace_root}}/archivesspace-{{archivesspace_version}}.zip"
+    src: "{{ archivesspace_download_url }}"
     dest: "{{ archivesspace_unzip_target }}"
     copy: no
   when: unzipped.stat.exists == false
@@ -34,37 +24,25 @@
     state: link
     force: yes
 
-- name: register stat for aspace_current
-  stat: 
-    path: "{{ archivesspace_home }}"
-  register: aspace_link
-
-#- name: Check if link points to this version
-#  stat: 
-#    path: "{{ archivesspace_home }}"
-#  register: apace_upgrade
-#  when: aspace_link.stat.islnks is defined
-
-#- name: Stop archivesspace before upgrade
-#  service:
-#    name: archivesspace
-#    state: stopped
-#  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
-
 - name: service exists ?
   stat:
     path: /etc/init.d/archivesspace
   register: service_exists
 
-- name: kill archivesspace
-  command: service archivesspace stop
-  when: "service_exists.stat.exists == true and (aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}'))"
+- name: Stop archivesspace.
+  service:
+    name: archivesspace
+    state: stopped
 
-- wait_for: 
+- name: Wait for 8080 to close
+  wait_for: 
     port: 8080
-    delay: 90
     state: absent
-  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
+
+- name: Wait for 8089 to close
+  wait_for: 
+    port: 8089
+    state: absent
 
 # Setup user-defined fields
 - include: user-defined-fields.yml

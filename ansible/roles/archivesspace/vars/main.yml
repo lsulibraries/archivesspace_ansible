@@ -6,3 +6,4 @@ archivesspace_home: "{{ archivesspace_root}}/archivesspace"
 jdbc_version: 5.1.36
 
 archivesspace_hostname: localhost
+archivesspace_download_url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
