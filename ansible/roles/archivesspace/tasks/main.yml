@@ -33,6 +33,7 @@
   service:
     name: archivesspace
     state: stopped
+  when: service_exists.stat.exists == true
 
 - name: Wait for 8080 to close
   wait_for: 
@@ -80,13 +81,11 @@
     path: /etc/init.d/archivesspace
   register: init_exists
 
-#- name: migrate data
-#  command: "cp -rL {{ archivesspace_home }}/{{ item }}/ {{ archivesspace_src }}/{{ item }}"
-#  with_items:
-#    - data
-#  when: "aspace_link.stat.islnk is not defined or aspace_link.stat.lnk_source != {{ archivesspace_src }}"
+- name: Check link exists
+  stat:
+    path: "{{ archivesspace_home }}"
+  register: aspace_link
 
-# this can go after the upgrade to 142 on prod and staging
 - name: Remove initial directory
   file:
     path: "{{ archivesspace_home }}"
