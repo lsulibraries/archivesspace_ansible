@@ -1,6 +1,4 @@
 ---
-- set_fact:
-    fetch: "{{ fetch_data}}"
 
 - name: get pip
   apt:
