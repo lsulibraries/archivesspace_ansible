@@ -65,3 +65,16 @@ When your log displays output like the following, you should have full access to
 ## Upgrade testing
 
 To test the upgrade from v1.4.2 -> v1.5-rc1, first build with the 1.4.x branch, ensuring that your S3 info is set as described above and that the variable `fetch_data` is `true` and the variable `upgrade` is `false`. Once the build has completed, verify that your data appears as it should in the 1.4.2 version. Then, checkout branch 1.5.x and ensure that the variables just mentioned now have the opposite values. Building again, with `vagrant provision` most likely will download the new codebase after deleting the hsolr index and backing up the database as described in the upgrade instructions: https://github.com/archivesspace/archivesspace/blob/master/UPGRADING_1.5.0.md.
+
+**vagrant workflow:**
+
+	git clone --recursive https://github.com/lsulibraries/archivesspace_ansible.git
+	git checkout 1.4.x
+	vagrant up
+	
+	# time passes...
+	# when complete, verify data via browser, check logs, etc...
+	
+	git checkout 1.5.x
+	vagrant provision
+	# when complete, verify data via browser, check logs, etc...	
