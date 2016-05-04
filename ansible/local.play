@@ -12,6 +12,7 @@
   vars:
     ## set this to False to skip the import of remote data (see file aws_secrets.example)
     fetch_data: False
+    upgrade: True
     archivesspace_download_url: https://github.com/archivesspace/archivesspace/releases/download/v1.5.0-rc1/archivesspace-v1.5.0-RC1.zip
   tasks:
 
