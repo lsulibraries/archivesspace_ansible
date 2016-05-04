@@ -11,11 +11,10 @@
     - ansible-automysqlbackup-role
 
   vars:
-    ## set this to False to skip the import of remote data (see file aws_secrets.example)
-    fetch_data: False
+    fetch_data: True
+    upgrade: False
 
   tasks:
-
     - name: restart apache
       service: 
         name: apache2

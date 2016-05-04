@@ -1,0 +1,10 @@
+---
+# following the upgrade guide: https://github.com/archivesspace/archivesspace/blob/master/UPGRADING_1.5.0.md
+
+- name: Backup the database
+  mysql_db:
+    name: all
+    state: dump
+    target: /backup/upgrade-1.4.2.sql
+
+- include: delete-solr-index.yml

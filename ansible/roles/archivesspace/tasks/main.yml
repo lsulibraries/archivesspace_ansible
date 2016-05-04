@@ -1,4 +1,5 @@
 ---
+- include: shutdown.yml
 
 - name: Check if we have already fetched the source for this version.
   stat:
@@ -23,27 +24,6 @@
     src: "{{ archivesspace_unzip_target }}/archivesspace"
     state: link
     force: yes
-
-- name: service exists ?
-  stat:
-    path: /etc/init.d/archivesspace
-  register: service_exists
-
-- name: Stop archivesspace.
-  service:
-    name: archivesspace
-    state: stopped
-  when: service_exists.stat.exists == true
-
-- name: Wait for 8080 to close
-  wait_for: 
-    port: 8080
-    state: absent
-
-- name: Wait for 8089 to close
-  wait_for: 
-    port: 8089
-    state: absent
 
 # Setup user-defined fields
 - include: user-defined-fields.yml
@@ -113,6 +93,9 @@
 
 # setup Jasper reporting
 - include: jasper.yml
+
+- include: upgrade.yml
+  when: upgrade
 
 - name: Start the app
   service: 
