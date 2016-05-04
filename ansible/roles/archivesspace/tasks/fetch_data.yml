@@ -40,13 +40,3 @@
     config_file: /root/.my.cnf
     state: import
   when: fetch
-
-- name: restart archivesspace
-  service: 
-    name: archivesspace
-    state: restarted
-  when: fetch
-
-- wait_for: 
-    port: 8080
-    delay: 30
