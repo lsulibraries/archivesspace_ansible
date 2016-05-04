@@ -4,9 +4,7 @@
   register: service_exists
 
 - name: Stop archivesspace.
-  service:
-    name: archivesspace
-    state: stopped
+  command: /etc/init.d/archivesspace stop
   when: service_exists.stat.exists
 
 - name: Wait for 8080 to close
