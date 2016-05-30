@@ -1,3 +1,4 @@
 *~
 .vagrant/*
 ansible/prod
+aws_secrets
