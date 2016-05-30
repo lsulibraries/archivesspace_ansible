@@ -22,7 +22,10 @@ mysql_users:
     host: "{{ mysql_host }}"
     password: "{{ mysql_pass }}"
     priv: "{{ mysql_db }}.*:ALL"
-
+  - name: jasper
+    host: "%"
+    password: jasper
+    priv: "{{ mysql_db }}.*:SELECT"
 archivesspace_hostname: localhost
 
 apache_listen_port: 80
