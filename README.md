@@ -19,7 +19,7 @@ To enable data import, edit the file `local.play`, setting the variable `fetch_d
 fetch_data: True
 ~~~
 
-and replace the values in aws_secrets.example with your own, saving as `aws_secrets`.
+The playbook expects that you have created a file called `aws_secrets` that contains AWS credentials. Using the file `aws_secrets.example` as a starting point, place the placeholder values there with your own credentials and bucket name, saving the file as `aws_secrets`.
 
 ## Installation (dev box)
 - open a terminal (git bash, on Windows)
