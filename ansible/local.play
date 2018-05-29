@@ -10,8 +10,8 @@
     - archivesspace
     - ansible-automysqlbackup-role
   vars:
-    fetch_data: True
-    upgrade: False
+    fetch_data: no
+    upgrade: yes
 
     # override
     archivesspace_download_url: https://github.com/archivesspace/archivesspace/releases/download/v1.5.0-rc1/archivesspace-v1.5.0-RC1.zip

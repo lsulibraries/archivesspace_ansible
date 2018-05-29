@@ -26,7 +26,9 @@ mysql_users:
     host: "%"
     password: jasper
     priv: "{{ mysql_db }}.*:SELECT"
+
 archivesspace_hostname: localhost
+archivesspace_version: v1.5.4
 
 apache_listen_port: 80
 apache_create_vhosts: true
