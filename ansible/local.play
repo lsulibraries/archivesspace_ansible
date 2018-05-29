@@ -18,10 +18,10 @@
 
   tasks:
     - name: restart apache
-      service: 
+      service:
         name: apache2
         state: restarted
 
-  vars_files: 
+  vars_files:
     - group_vars/local
     - ['aws_secrets', 'aws_secrets.example']

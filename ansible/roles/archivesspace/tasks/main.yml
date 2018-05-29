@@ -29,7 +29,7 @@
 - include: user-defined-fields.yml
 
 - name: Get mysql connector
-  get_url: 
+  get_url:
     url: "http://central.maven.org/maven2/mysql/mysql-connector-java/{{ jdbc_version }}/mysql-connector-java-{{ jdbc_version }}.jar"
     dest: "{{ archivesspace_src }}/lib/"
 
@@ -51,13 +51,13 @@
 
 - include: fetch_data.yml
   when: fetch_data
-    
+
 - name: run db insert script
   command: "sh {{ archivesspace_src }}/scripts/setup-database.sh"
 #  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
 - name: check init script exists
-  stat: 
+  stat:
     path: /etc/init.d/archivesspace
   register: init_exists
 
@@ -80,7 +80,7 @@
     force: true
 
 - name: setup init script
-  file: 
+  file:
     path: "/etc/init.d/archivesspace"
     src:  "{{ archivesspace_home }}/archivesspace.sh"
     state: link
@@ -98,14 +98,14 @@
   when: upgrade
 
 - name: Start the app
-  service: 
+  service:
     name:    archivesspace
     state:   started
     enabled: yes
-  environment: 
+  environment:
     JAVA_FONTS: /usr/share/fonts/truetype
 
-- wait_for: 
+- wait_for:
     port: 8080
     delay: 30
 
