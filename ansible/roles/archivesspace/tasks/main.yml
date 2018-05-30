@@ -52,7 +52,7 @@
 - include: fetch_data.yml
   when: fetch_data
 
-- name: run db insert script
+- name: run db setup script
   command: "sh {{ archivesspace_src }}/scripts/setup-database.sh"
 #  when: "aspace_link.stat.islnk == false or (aspace_link.stat.islnk is defined and aspace_link.stat.lnk_source != '{{ archivesspace_src }}')"
 
