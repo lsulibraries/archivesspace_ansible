@@ -1,6 +1,16 @@
 ---
 - hosts: all
   become: true
+  gather_facts: false
+  pre_tasks:
+  - name: Install python for Ansible
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    changed_when: False
+
+  # Manually gather facts once python is installed
+  - name: gather facts
+    setup:
+
   roles:
     - common
     - ansible-role-apache
@@ -10,7 +20,7 @@
     - archivesspace
     - ansible-automysqlbackup-role
   vars:
-    fetch_data: no
+    fetch_data: yes
     upgrade: yes
 
     # override
