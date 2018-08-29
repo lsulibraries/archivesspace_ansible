@@ -2,3 +2,5 @@
 .vagrant/*
 ansible/prod
 aws_secrets
+hosts
+*.retry
