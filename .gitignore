@@ -1,6 +1,6 @@
 *~
 .vagrant/*
 ansible/prod
-aws_secrets
+vlt/
 hosts
 *.retry
