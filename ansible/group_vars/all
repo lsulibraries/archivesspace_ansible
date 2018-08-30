@@ -1,11 +1,8 @@
----
-# default cron configuration
-automysqlbackup_cron:
-  minute: "0"
-  hour: "0"
-  day: "*"
-  month: "*"
-  weekday: "*"
+bucket: lsulibraries-archivesspace
+aws_bucket
+aws_user_name: user
+aws_access_key_id: 'secret--key-id...'
+aws_secret_access_key: 'seecrettt key'
 
 mysql_user: as
 mysql_pass: pass
@@ -46,6 +43,14 @@ apache_vhosts:
       ProxyPass / http://localhost:8080/
       ProxyPassReverse / http://localhost:8080/
 
-automysqlbackup_dbexclude: "information_schema"
+automysqlbackup_dbexclude: ""
 automysqlbackup_dump_full_schema: yes
 automysqlbackup_mailcontent: stdout
+automysqlbackup_dbames: 'archivesspace'
+# default cron configuration
+automysqlbackup_cron:
+  minute: "*/5"
+  hour: "10-17"
+  day: "*"
+  month: "*"
+  weekday: "*"
