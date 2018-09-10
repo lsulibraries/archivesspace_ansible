@@ -25,7 +25,7 @@ mysql_users:
     priv: "{{ mysql_db }}.*:SELECT"
 
 archivesspace_hostname: localhost
-archivesspace_version: v1.5.4
+archivesspace_version: v1.4.2
 archivesspace_enable_jasper: no
 
 apache_listen_port: 80
@@ -45,3 +45,5 @@ apache_vhosts:
       ProxyPassReverse / http://localhost:8080/
 
 archivesspace_upgrade_1_5: no
+fetch_data: yes
+upgrade: no

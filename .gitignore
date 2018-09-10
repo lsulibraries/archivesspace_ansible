@@ -4,3 +4,5 @@ ansible/prod
 vlt/
 hosts
 *.retry
+aws_secrets
+vault-key

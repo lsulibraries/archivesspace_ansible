@@ -1,9 +1,23 @@
-# archivesspace_version: v1.5.0-RC2
+archivesspace_version: v1.4.2
 archivesspace_root: /opt
 archivesspace_unzip_target: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}"
 archivesspace_src: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}/archivesspace"
 archivesspace_home: "{{ archivesspace_root}}/archivesspace"
-jdbc_version: 5.1.36
+jdbc_version: 5.1.39
 
 archivesspace_hostname: localhost
 archivesspace_download_url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
+archivesspace_enable_jasper: no
+
+fetch_data: no
+upgrade: no
+archivesspace_upgrade_1_5: no # only 'yes' for the upgrade from 1.4.x -> 1.5.x
+
+# backup vars
+archivesspace_backup_dir: /backup
+aspace_backup_cron:
+  minute: '*'
+  hour: '*'
+  day: '*'
+  month: '*'
+  weekday: '*'
