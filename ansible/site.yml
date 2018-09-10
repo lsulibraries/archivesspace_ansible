@@ -1,12 +1,22 @@
 ---
 - hosts: all
   become: true
+  gather_facts: false
+  pre_tasks:
+  - name: Install python for Ansible
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    changed_when: False
+
+  # Manually gather facts once python is installed
+  - name: gather facts
+    setup:
+      
   roles:
-  #   - common
-  #   - ansible-role-apache
-  #   - ansible-role-git
-  #   - ansible-role-mysql
-  #   - ansible-role-java
-  #   - archivesspace
-    - ansible-automysqlbackup-role
-- import_playbook: aws-sync.yml
+    - common
+    - ansible-role-apache
+    - ansible-role-git
+    - ansible-role-mysql
+    - ansible-role-java
+    - archivesspace
+    - ansible-role-s3-sync
+    - ansible-role-rotate-backups
