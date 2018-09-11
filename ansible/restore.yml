@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    ansible_role_archivesspace_mode: 'restore'
+    restore_type: 'mysqldump' # one of [mysqldump | aspace]
+    archivesspace_restore_path: "backup/archivesspace-backup-dev"
+    archivesspace_restore_filename: daily_archivesspace.sql.gz
+    rebuild_index: yes
+  pre_tasks:
+  - name: get latest backup from s3
+    command: "aws s3 cp s3://{{ bucket }}/{{ archivesspace_restore_path }}/{{ archivesspace_restore_filename }} /tmp/"
+    become: yes
+    become_user: "{{ backup_agent_username }}"
+  roles:
+  - archivesspace

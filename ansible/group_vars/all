@@ -1,4 +1,7 @@
+archivesspace_s3_location_mysqldump: s3://bucket/path/to/dump
 bucket: lsulibraries-archivesspace
+
+
 #aws_bucket
 aws_user_name: user
 aws_access_key_id: 'secret--key-id...'
@@ -45,3 +48,5 @@ apache_vhosts:
       ProxyPassReverse / http://localhost:8080/
 
 archivesspace_upgrade_1_5: no
+backup_agent_username: s3backup
+archivesspace_home: /opt/archivesspace

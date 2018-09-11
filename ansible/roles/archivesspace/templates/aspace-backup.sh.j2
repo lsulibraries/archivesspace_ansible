@@ -1,6 +1,3 @@
 #! /bin/bash
-
-timestamp() {
-    date +"%Y-%m-%d_%H-%M-%S"
-}
-{{ archivesspace_root }}/archivesspace/scripts/backup.sh --mysqldump --output /{{ archivesspace_backup_dir }}/aspace-$(timestamp).zip
+TIMESTMP=$(date +"%Y-%m-%d_%H-%M-%S")
+{{ archivesspace_root }}/archivesspace/scripts/backup.sh --mysqldump --output {{ archivesspace_backup_dir }}/aspace-$TIMESTMP.zip

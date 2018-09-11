@@ -1,21 +1,9 @@
 ---
-- include: shutdown.yml
-- include: setup.yml
-- include: user-defined-fields.yml
-- include: install.yml
-
-# setup Jasper reporting
-- include: jasper.yml
-  when: archivesspace_enable_jasper
+- include: fresh_install.yml
+  when: ansible_role_archivesspace_mode == 'fresh'
 
 - include: upgrade.yml
-  when: upgrade and not fetch_data
+  when: ansible_role_archivesspace_mode == 'upgrade'
 
-- include: fetch_data.yml
-  when: fetch_data and not upgrade
-
-- include: upgrade-1.5.yml
-  when: upgrade_1_5
-
-- include: backup.yml
-- include: startup.yml
+- include: restore.yml
+  when: ansible_role_archivesspace_mode == 'restore'

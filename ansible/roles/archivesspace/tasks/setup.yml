@@ -75,3 +75,9 @@
 
 - name: ensure runlevel
   command: "update-rc.d archivesspace defaults"
+
+- name: Ensure java memory is set
+  lineinfile:
+    line: 'export ASPACE_JAVA_XMX="-Xmx2048m"'
+    path: /etc/init.d/archivesspace
+    insertafter: "### END INIT INFO"

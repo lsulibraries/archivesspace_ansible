@@ -1,8 +1,7 @@
 ---
-- include: backup.yml
-- include: shutdown.yml
 - include: setup.yml
 - include: user-defined-fields.yml
-- include: jasper.yml
 - include: install.yml
+- include: jasper.yml
+- include: configure-backup.yml
 - include: startup.yml

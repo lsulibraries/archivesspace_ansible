@@ -1,0 +1,15 @@
+---
+- include: shutdown.yml
+
+- name: import db
+  mysql_db:
+    target: "/tmp/{{ archivesspace_restore_filename }}"
+    db: archivesspace
+    config_file: /root/.my.cnf
+    state: import
+  when: restore_type == 'mysqldump'
+
+- include: rebuild-solr.yml
+  when: rebuild_index
+
+- include: startup.yml

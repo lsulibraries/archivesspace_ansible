@@ -10,7 +10,10 @@
   # Manually gather facts once python is installed
   - name: gather facts
     setup:
-      
+  vars:
+    ansible_role_archivesspace_mode: 'fresh'
+    archivesspace_enable_jasper: yes
+    archivesspace_version: v1.4.2
   roles:
     - common
     - ansible-role-apache

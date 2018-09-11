@@ -1,0 +1,5 @@
+---
+- name: Remove indexer_state so aspace will rebuild the index on next start
+  file:
+    path: "{{ archivesspace_home }}/data/indexer_state"
+    state: absent

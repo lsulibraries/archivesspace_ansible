@@ -1,7 +1,7 @@
 - name: Start the app
   service:
     name:    archivesspace
-    state:   started
+    state:   restarted
     enabled: yes
   environment:
     JAVA_FONTS: /usr/share/fonts/truetype
