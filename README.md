@@ -5,21 +5,15 @@ sets up archivespace as a dev environment
 - [virtualbox](http://www.oracle.com/technetwork/server-storage/virtualbox/downloads/index.html)
 - a terminal
 - git
-  
+
 ## Windows users
 Windows users will need to obtain a linux-style terminal.
 Kill two birds with one stone by installing [Git for Windows](https://git-scm.com/downloads); just be sure to install the 'git bash' component.
 
 ## Importing data
-You can optionally import mysql data from an S3 bucket using credentials found in a file called aws_secrets. 
-The expected mysqldump location is `s3://{{ bucket }}/latest/daily_archivesspace.sql.gz`.
-To enable data import, edit the file `local.play`, setting the variable `fetch_data` to `True`, 
+.....................
 
-~~~
-fetch_data: True
-~~~
 
-The playbook expects that you have created a file called `aws_secrets` that contains AWS credentials. Using the file `aws_secrets.example` as a starting point, place the placeholder values there with your own credentials and bucket name, saving the file as `aws_secrets`.
 
 ## Installation (dev box)
 - open a terminal (git bash, on Windows)
@@ -29,7 +23,7 @@ The playbook expects that you have created a file called `aws_secrets` that cont
 
 
 ## Installation (production)
-- be sure to provide commandline --extra_vars values for 
+- be sure to provide commandline --extra_vars values for
   - `admin_network` - default is '0/0', all networks
   - `mysql_root_password` - default is 'root'
   - `archivesspace_hostname` - default is localhost; used for apache vhost configuration of the `Servername` parameter.
@@ -64,17 +58,17 @@ When your log displays output like the following, you should have full access to
 
 ## Upgrade testing
 
-To test the upgrade from v1.4.2 -> v1.5-rc1, first build with the 1.4.x branch, ensuring that your S3 info is set as described above and that the variable `fetch_data` is `true` and the variable `upgrade` is `false`. Once the build has completed, verify that your data appears as it should in the 1.4.2 version. Then, checkout branch 1.5.x and ensure that the variables just mentioned now have the opposite values. Building again, with `vagrant provision` most likely will download the new codebase after deleting the hsolr index and backing up the database as described in the upgrade instructions: https://github.com/archivesspace/archivesspace/blob/master/UPGRADING_1.5.0.md.
+To test the upgrade from v1.4.2 -> v1.5-rc1, first build ...... Once the build has completed, verify that your data appears as it should in the 1.4.2 version. Then, ........ Build again, with `vagrant provision` ............as described in the upgrade instructions: https://github.com/archivesspace/archivesspace/blob/master/UPGRADING_1.5.0.md.
 
 **vagrant workflow:**
 
 	git clone --recursive https://github.com/lsulibraries/archivesspace_ansible.git
 	git checkout 1.4.x
 	vagrant up
-	
+
 	# time passes...
 	# when complete, verify data via browser, check logs, etc...
-	
+
 	git checkout 1.5.x
 	vagrant provision
-	# when complete, verify data via browser, check logs, etc...	
+	# when complete, verify data via browser, check logs, etc...

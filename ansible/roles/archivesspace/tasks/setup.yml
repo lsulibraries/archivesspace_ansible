@@ -25,7 +25,7 @@
 
 - name: Get mysql connector
   get_url:
-    url: "http://central.maven.org/maven2/mysql/mysql-connector-java/{{ jdbc_version }}/mysql-connector-java-{{ jdbc_version }}.jar"
+    url: "http://central.maven.org/maven2/mysql/mysql-connector-java/{{ archivesspace_jdbc_version }}/mysql-connector-java-{{ archivesspace_jdbc_version }}.jar"
     dest: "{{ archivesspace_src }}/lib/"
 
 # @TODO may need to define an archivesspace restart handler to pickup changes here

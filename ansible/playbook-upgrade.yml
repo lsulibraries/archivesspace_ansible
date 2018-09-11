@@ -2,8 +2,8 @@
 - hosts: all
   become: yes
   vars:
-    ansible_role_archivesspace_mode: 'upgrade'
-    rebuild_index: yes
+    archivesspace_role_mode: 'upgrade'
+    archivesspace_rebuild_index: yes
     archivesspace_version: v2.3.2
   roles:
   - archivesspace

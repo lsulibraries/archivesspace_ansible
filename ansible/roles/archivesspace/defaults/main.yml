@@ -1,23 +1,19 @@
-archivesspace_version: v1.4.2
-archivesspace_root: /opt
-archivesspace_unzip_target: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}"
-archivesspace_src: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}/archivesspace"
-archivesspace_home: "{{ archivesspace_root}}/archivesspace"
-jdbc_version: 5.1.39
-
-archivesspace_hostname: localhost
-archivesspace_download_url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
-archivesspace_enable_jasper: no
-
-fetch_data: no
-upgrade: no
-archivesspace_upgrade_1_5: no # only 'yes' for the upgrade from 1.4.x -> 1.5.x
-
-# backup vars
-archivesspace_backup_dir: /backup
 aspace_backup_cron:
   minute: '*'
   hour: '*'
   day: '*'
   month: '*'
   weekday: '*'
+archivesspace_backup_dir: /backup
+archivesspace_download_url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
+archivesspace_home: "{{ archivesspace_root}}/archivesspace"
+archivesspace_jdbc_version: 5.1.39
+archivesspace_rebuild_index: no
+archivesspace_restore_filename: restore.sql.gz
+archivesspace_restore_path: "path/to/restore/dir"
+archivesspace_restore_type: mysqldump
+archivesspace_role_mode: "not set" # should be one of [ fresh, restor, upgrade ]
+archivesspace_root: /opt
+archivesspace_src: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}/archivesspace"
+archivesspace_unzip_target: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}"
+archivesspace_version: v1.4.2

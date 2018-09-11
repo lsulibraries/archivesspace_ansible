@@ -11,8 +11,7 @@
   - name: gather facts
     setup:
   vars:
-    ansible_role_archivesspace_mode: 'fresh'
-    archivesspace_enable_jasper: yes
+    archivesspace_role_mode: 'fresh'
     archivesspace_version: v1.4.2
   roles:
     - common

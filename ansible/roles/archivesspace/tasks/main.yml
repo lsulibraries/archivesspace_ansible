@@ -1,9 +1,9 @@
 ---
 - include: fresh_install.yml
-  when: ansible_role_archivesspace_mode == 'fresh'
+  when: archivesspace_role_mode == 'fresh'
 
 - include: upgrade.yml
-  when: ansible_role_archivesspace_mode == 'upgrade'
+  when: archivesspace_role_mode == 'upgrade'
 
 - include: restore.yml
-  when: ansible_role_archivesspace_mode == 'restore'
+  when: archivesspace_role_mode == 'restore'
