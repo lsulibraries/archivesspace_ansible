@@ -23,15 +23,15 @@ Vagrant.configure(2) do |config|
   require 'rbconfig'
   is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
   if is_windows
-    # Provisioning configuration for shell script.
-    config.vm.provision "shell" do |sh|
-      sh.path = "ansible/JJG-Ansible-Windows/windows.sh"
-      sh.args = "ansible/local.play"
+    config.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "ansible/playbook-fresh_install.yml"
+      ansible.verbose = 'vv'
+      ansible.install = true
     end
   else
     # Provisioning configuration for Ansible (for Mac/Linux hosts).
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/local.play"
+      ansible.playbook = "ansible/playbook-fresh_install.yml"
       ansible.verbose = 'vv'
     end
   end

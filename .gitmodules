@@ -14,9 +14,6 @@
 [submodule "ansible/roles/ansible-automysqlbackup-role"]
 	path = ansible/roles/ansible-automysqlbackup-role
 	url = https://github.com/lsulibraries/ansible-automysqlbackup-role.git
-[submodule "ansible/JJG-Ansible-Windows"]
-	path = ansible/JJG-Ansible-Windows
-	url = https://github.com/lsulibraries/JJG-Ansible-Windows.git
 [submodule "ansible/roles/ansible-role-s3-sync"]
 	path = ansible/roles/ansible-role-s3-sync
 	url = https://github.com/lsulibraries/ansible-role-s3-sync.git
