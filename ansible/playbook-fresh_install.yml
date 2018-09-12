@@ -24,3 +24,5 @@
     - archivesspace
     - ansible-role-s3-sync
     - ansible-role-rotate-backups
+
+- import_playbook: playbook-ssl.yml

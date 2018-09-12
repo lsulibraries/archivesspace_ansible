@@ -1,13 +1,24 @@
 # local values for overrides
+ansible_openssl_cert_path: /etc/ssl/certs/fullchain.pem
+ansible_openssl_csr_path: /etc/ssl/private/req.csr
+ansible_openssl_dhparam_path: /etc/ssl/certs/dhparam.pem
+ansible_openssl_privatekey_path: /etc/ssl/private/privkey.pem
+
+archivesspace_apache_webmaster_email: webmaster@example.com
 archivesspace_hostname: localhost
+archivesspace_java_xmx: '{{ (ansible_memtotal_mb*0.7)|int|abs }}' # https://stackoverflow.com/questions/33505521/ansible-can-i-use-arithmetic-when-setting-a-variable-value
+
 archivesspace_mysql_db: archivesspace
 archivesspace_mysql_host: localhost
 archivesspace_mysql_jasper_pass: jasperpass
 archivesspace_mysql_jasper_user: jasper
 archivesspace_mysql_pass: pass
 archivesspace_mysql_user: as
-# https://stackoverflow.com/questions/33505521/ansible-can-i-use-arithmetic-when-setting-a-variable-value
-archivesspace_java_xmx: '{{ (ansible_memtotal_mb*0.7)|int|abs }}'
+
+archivesspace_ssl_selfsigned: yes
+
+s3_sync_aws_access_key_id: abcdefg
+s3_sync_aws_secret_access_key: somethinglong+confusing
 s3_sync_bucket: mybuckett
 
 ################################

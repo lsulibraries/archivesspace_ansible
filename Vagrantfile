@@ -27,12 +27,22 @@ Vagrant.configure(2) do |config|
       ansible.playbook = "ansible/playbook-fresh_install.yml"
       ansible.verbose = 'vv'
       ansible.install = true
+      ansible.extra_vars = {
+        archivesspace_hostname: 192.168.33.10,
+        archivesspace_ssl_files: "no",
+        archivesspace_ssl_selfsigned: "yes"
+      }
     end
   else
     # Provisioning configuration for Ansible (for Mac/Linux hosts).
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/playbook-fresh_install.yml"
       ansible.verbose = 'vv'
+      ansible.extra_vars = {
+        archivesspace_hostname: 192.168.33.10,
+        archivesspace_ssl_files: "no",
+        archivesspace_ssl_selfsigned: "yes"
+      }
     end
   end
 end

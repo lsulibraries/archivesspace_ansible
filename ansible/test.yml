@@ -1,9 +1,10 @@
 ---
 - hosts: all
   become: yes
+
   tasks:
-  - name: Ensure java memory is set
-    lineinfile:
-      line: 'export ASPACE_JAVA_XMX="-Xmx{{ archivesspace_java_xmx }}m"'
-      path: /etc/init.d/archivesspace
-      insertafter: "### END INIT INFO"
+
+  - debug:
+      msg: 'helllo'
+
+- import_playbook: playbook-ssl.yml

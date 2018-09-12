@@ -1,0 +1,19 @@
+- apt:
+    name: python-openssl
+
+- openssl_privatekey:
+    path: "{{ ansible_openssl_privatekey_path }}"
+    force: yes
+
+- name: Generate an OpenSSL CSR.
+  openssl_csr:
+    path: "{{ ansible_openssl_csr_path }}"
+    privatekey_path: "{{ ansible_openssl_privatekey_path }}"
+    common_name: "{{ archivesspace_hostname }}"
+
+- name: Generate a Self Signed OpenSSL certificate.
+  openssl_certificate:
+    path: "{{ ansible_openssl_cert_path }}"
+    privatekey_path: "{{ ansible_openssl_privatekey_path }}"
+    csr_path: "{{ ansible_openssl_csr_path }}"
+    provider: selfsigned
