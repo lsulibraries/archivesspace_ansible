@@ -8,7 +8,7 @@
   file:
     path: "{{ archivesspace_backup_dir }}"
     state: directory
-    mode: '0755'
+    mode: '0775'
 
 - name: setup cron task
   cron:

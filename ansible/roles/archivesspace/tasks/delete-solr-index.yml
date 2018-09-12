@@ -3,17 +3,17 @@
   file:
     path: "{{ archivesspace_home }}/data/solr_index/index"
     state: absent
-    
+
 - name: Recreate directory solr_index/index
   file:
     path: "{{ archivesspace_home }}/data/solr_index/index"
     state: directory
-          
+
 - name: Wipe out indexer_state
   file:
     path: "{{ archivesspace_home }}/data/indexer_state"
     state: absent
-    
+
 - name: Recreate directory indexer_state
   file:
     path: "{{ archivesspace_home }}/data/indexer_state"

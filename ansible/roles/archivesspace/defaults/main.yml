@@ -9,8 +9,8 @@ archivesspace_download_url: "https://github.com/archivesspace/archivesspace/rele
 archivesspace_home: "{{ archivesspace_root}}/archivesspace"
 archivesspace_jdbc_version: 5.1.39
 archivesspace_rebuild_index: no
-archivesspace_restore_filename: restore.sql.gz
-archivesspace_restore_path: "path/to/restore/dir"
+archivesspace_restore_s3_filename: restore.sql.gz
+archivesspace_restore_s3_path: "path/to/restore/dir"
 archivesspace_restore_type: mysqldump
 archivesspace_role_mode: "not set" # should be one of [ fresh, restor, upgrade ]
 archivesspace_root: /opt

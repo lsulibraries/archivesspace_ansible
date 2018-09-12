@@ -3,7 +3,7 @@
 
 - name: import db
   mysql_db:
-    target: "/tmp/{{ archivesspace_restore_filename }}"
+    target: "/tmp/{{ archivesspace_restore_s3_filename }}"
     db: archivesspace
     config_file: /root/.my.cnf
     state: import
