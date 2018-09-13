@@ -28,6 +28,12 @@
       src: templates/vhosts.conf.j2
       dest: /etc/apache2/sites-available/vhosts.conf
 
+  - name: Enable ssl mods
+    command: "a2enmod {{ item }}"
+    with_items:
+      - ssl
+      - headers
+
   - name: Enable ssl-conf
     command: a2enconf ssl-params
 

@@ -5,6 +5,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "ubuntu/xenial64"
 
+  config.vm.network "forwarded_port", guest: 80, host: 8000
   config.vm.network "forwarded_port", guest: 8080, host: 8080
   config.vm.network "forwarded_port", guest: 8089, host: 8089
   config.vm.network "forwarded_port", guest: 8081, host: 8081
@@ -28,9 +29,13 @@ Vagrant.configure(2) do |config|
       ansible.verbose = 'vv'
       ansible.install = true
       ansible.extra_vars = {
-        archivesspace_hostname: 192.168.33.10,
+        archivesspace_hostname: "192.168.33.10",
         archivesspace_ssl_files: "no",
-        archivesspace_ssl_selfsigned: "yes"
+        archivesspace_ssl_selfsigned: "yes",
+        s3_sync_aws_access_key_id: "abcdefg",
+        s3_sync_aws_secret_access_key: "somethinglong+confusing",
+        s3_sync_bucket: "mybuckett",
+        s3_sync_folder: "backup/"
       }
     end
   else
@@ -39,9 +44,13 @@ Vagrant.configure(2) do |config|
       ansible.playbook = "ansible/playbook-fresh_install.yml"
       ansible.verbose = 'vv'
       ansible.extra_vars = {
-        archivesspace_hostname: 192.168.33.10,
+        archivesspace_hostname: "192.168.33.10",
         archivesspace_ssl_files: "no",
-        archivesspace_ssl_selfsigned: "yes"
+        archivesspace_ssl_selfsigned: true,
+        s3_sync_aws_access_key_id: "abcdefg",
+        s3_sync_aws_secret_access_key: "somethinglong+confusing",
+        s3_sync_bucket: "mybuckett",
+        s3_sync_folder: "backup/"
       }
     end
   end
