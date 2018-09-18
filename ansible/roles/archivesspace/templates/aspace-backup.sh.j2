@@ -1,4 +1,4 @@
 #! /bin/bash
 TIMESTMP=$(date +"%Y-%m-%d_%H-%M-%S")
 {{ archivesspace_root }}/archivesspace/scripts/backup.sh --mysqldump --output {{ archivesspace_rotations_dir }}/aspace-$TIMESTMP.zip
-cp {{ archivesspace_rotations_dir }}/aspace-$TIMESTMP.zip {{ archivesspace_migrations_dir }}/aspace-latest.zip
+cp {{ archivesspace_rotations_dir }}/aspace-$TIMESTMP.zip {{ archivesspace_rotations_dir }}/aspace-latest.zip
