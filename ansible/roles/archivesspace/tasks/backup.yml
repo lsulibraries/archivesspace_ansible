@@ -1,3 +1,4 @@
 ---
+
 - name: Create backup
-  command: "{{ archivesspace_home }}/scripts/backup.sh --mysqldump --output {{ archivesspace_backup_dir }}/before-update-to-{{ archivesspace_version }}.zip"
+  command: "{{ archivesspace_home }}/scripts/backup.sh --mysqldump --output {{ archivesspace_migrations_dir }}/before-update-to-{{ archivesspace_version }}.zip"

@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", ip: "192.168.33.10"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"
+    vb.memory = "4096"
   end
 
   # Taken from https://github.com/geerlingguy/JJG-Ansible-Windows:
@@ -34,7 +34,7 @@ Vagrant.configure(2) do |config|
         archivesspace_ssl_selfsigned: "yes",
         s3_sync_aws_access_key_id: "abcdefg",
         s3_sync_aws_secret_access_key: "somethinglong+confusing",
-        s3_sync_bucket: "mybuckett",
+        s3_sync_bucket: "mybucket",
         s3_sync_folder: "backup/"
       }
     end
@@ -47,10 +47,10 @@ Vagrant.configure(2) do |config|
         archivesspace_hostname: "192.168.33.10",
         archivesspace_ssl_files: "no",
         archivesspace_ssl_selfsigned: true,
-        s3_sync_aws_access_key_id: "abcdefg",
-        s3_sync_aws_secret_access_key: "somethinglong+confusing",
-        s3_sync_bucket: "mybuckett",
-        s3_sync_folder: "backup/"
+        s3_sync_bucket: "mybucket",
+        s3_sync_folder: "backup/",
+        archivesspace_restore_s3_access_key_id: "keyidgoeshere",
+        archivesspace_restore_s3_secret_access_key: "sthsecret+keylike",
       }
     end
   end

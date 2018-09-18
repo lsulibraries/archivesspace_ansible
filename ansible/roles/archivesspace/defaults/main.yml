@@ -5,6 +5,8 @@ aspace_backup_cron:
   month: '*'
   weekday: '*'
 archivesspace_backup_dir: /backup
+archivesspace_migrations_dir: "{{ archivesspace_backup_dir }}/migrations"
+archivesspace_rotations_dir: "{{ archivesspace_backup_dir }}/rotations"
 archivesspace_download_url: "https://github.com/archivesspace/archivesspace/releases/download/{{archivesspace_version}}/archivesspace-{{archivesspace_version}}.zip"
 archivesspace_home: "{{ archivesspace_root}}/archivesspace"
 archivesspace_jdbc_version: 5.1.39

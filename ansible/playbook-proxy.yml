@@ -1,0 +1,55 @@
+---
+- hosts: proxy
+  become: true
+  gather_facts: false
+  pre_tasks:
+  - name: Install python for Ansible
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    changed_when: False
+
+  # Manually gather facts once python is installed
+  - name: gather facts
+    setup:
+
+  - name: stop apache
+    service:
+      name: apache2
+      state: stopped
+
+  vars:
+  roles:
+    - common
+    - ansible-role-apache
+
+  post_tasks:
+  - openssl_dhparam:
+      path: "{{ ansible_openssl_dhparam_path }}"
+      size: 2048
+
+  - name: Configure apache ssl params
+    template:
+      src: templates/ssl-params.conf.j2
+      dest: /etc/apache2/conf-available/ssl-params.conf
+
+  - name: Enable ssl-conf
+    command: a2enconf ssl-params
+
+  - name: Copy certs
+    copy:
+      src: "files/{{ item }}"
+      dest: "{{ archivesspace_cert_path }}/{{ item }}"
+    with_items:
+      - "{{ archivesspace_production_cert_filename }}"
+      - "{{ archivesspace_production_chain_filename }}"
+
+  - name: Copy keys
+    copy:
+      src: "files/{{ item }}"
+      dest: "{{ archivesspace_key_path }}/{{ item }}"
+    with_items:
+      - "{{ archivesspace_production_key_filename }}"
+
+  - name: Restart apache2
+    service:
+      name: apache2
+      state: restarted

@@ -1,4 +1,9 @@
-sets up archivespace as a dev environment
+sets up archivespace
+
+## Vagrant
+- first install by setting the playbook in the Vagrantfile as `ansible.playbook = "ansible/playbook-restore.yml"`
+- once complete, add real values to the `ansible.extra_vars`, and then set `ansible.playbook = "ansible/playbook-restore.yml"`, followed by `vagrant provision`
+
 
 # Dependencies
 - [vagrant](https://www.vagrantup.com/downloads.html)

@@ -2,18 +2,21 @@
 - hosts: all
   become: yes
   vars:
-    archivesspace_rebuild_index: yes
-    archivesspace_restore_s3_filename: daily_archivesspace.sql.gz
-    archivesspace_restore_type: 'mysqldump' # one of [mysqldump | aspace]
+    archivesspace_rebuild_index: no # yes if all you have is sql dump
+    archivesspace_restore_s3_filename: v2.3.2.zip
+    archivesspace_restore_s3_path: "{{ archivesspace_s3_migrations_folder }}"
+    archivesspace_restore_type: 'aspace' # one of [mysqldump | aspace]
     archivesspace_role_mode: 'restore'
 
   pre_tasks:
   - name: get latest backup from s3
-    command: "{{ s3_sync_aws_cli_bin_location }} s3 cp s3://{{ s3_sync_bucket }}/{{ s3_sync_folder }}{{ archivesspace_restore_s3_filename }} /tmp/"
+    # https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html
+    # https://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html
+    command: "{{ s3_sync_aws_cli_bin_location }} s3 cp s3://{{ s3_sync_bucket }}/{{ archivesspace_s3_migrations_folder }}/{{ archivesspace_restore_s3_filename }} /tmp/"
     environment:
-      AWS_ACCESS_KEY_ID: "{{ s3_sync_aws_access_key_id }}"
+      AWS_ACCESS_KEY_ID: "{{ archivesspace_restore_s3_access_key_id }}"
       AWS_DEFAULT_REGION: us-west-2
-      AWS_SECRET_ACCESS_KEY: "{{ s3_sync_aws_secret_access_key }}"
+      AWS_SECRET_ACCESS_KEY: "{{ archivesspace_restore_s3_secret_access_key }}"
 
   roles:
   - archivesspace

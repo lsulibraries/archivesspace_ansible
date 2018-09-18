@@ -1,10 +1,12 @@
 ---
 - hosts: all
   become: yes
-
+  vars:
+    passrandom: "{{ lookup('password', ansible_random_password_dir + '/' + 'mysql' + '.' + ansible_random_password_ext + ' chars=ascii_letters,digits,hexdigits length=45') }}"
   tasks:
 
   - debug:
-      msg: 'helllo'
+      var: passrandom
 
-- import_playbook: playbook-ssl.yml
+  - debug:
+      var: passrandom

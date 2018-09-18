@@ -10,6 +10,16 @@
     state: directory
     mode: '0775'
 
+- name: Ensure dir exists
+  file:
+    path: "{{ archivesspace_migrations_dir }}"
+    state: directory
+
+- name: Ensure dir exists
+  file:
+    path: "{{ archivesspace_rotations_dir }}"
+    state: directory
+
 - name: setup cron task
   cron:
     name: "aspace backup process"
