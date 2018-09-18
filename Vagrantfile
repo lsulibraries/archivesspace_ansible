@@ -3,8 +3,9 @@
 
 Vagrant.configure(2) do |config|
 
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
 
+  config.vm.network "forwarded_port", guest: 80, host: 8000
   config.vm.network "forwarded_port", guest: 8080, host: 8080
   config.vm.network "forwarded_port", guest: 8089, host: 8089
   config.vm.network "forwarded_port", guest: 8081, host: 8081
@@ -15,7 +16,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", ip: "192.168.33.10"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"
+    vb.memory = "4096"
   end
 
   # Taken from https://github.com/geerlingguy/JJG-Ansible-Windows:
@@ -23,16 +24,34 @@ Vagrant.configure(2) do |config|
   require 'rbconfig'
   is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
   if is_windows
-    # Provisioning configuration for shell script.
-    config.vm.provision "shell" do |sh|
-      sh.path = "ansible/JJG-Ansible-Windows/windows.sh"
-      sh.args = "ansible/local.play"
+    config.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "ansible/playbook-fresh_install.yml"
+      ansible.verbose = 'vv'
+      ansible.install = true
+      ansible.extra_vars = {
+        archivesspace_hostname: "192.168.33.10",
+        archivesspace_ssl_files: "no",
+        archivesspace_ssl_selfsigned: "yes",
+        s3_sync_aws_access_key_id: "abcdefg",
+        s3_sync_aws_secret_access_key: "somethinglong+confusing",
+        s3_sync_bucket: "mybucket",
+        s3_sync_folder: "backup/"
+      }
     end
   else
     # Provisioning configuration for Ansible (for Mac/Linux hosts).
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/local.play"
+      ansible.playbook = "ansible/playbook-fresh_install.yml"
       ansible.verbose = 'vv'
+      ansible.extra_vars = {
+        archivesspace_hostname: "192.168.33.10",
+        archivesspace_ssl_files: "no",
+        archivesspace_ssl_selfsigned: true,
+        s3_sync_bucket: "mybucket",
+        s3_sync_folder: "backup/",
+        archivesspace_restore_s3_access_key_id: "keyidgoeshere",
+        archivesspace_restore_s3_secret_access_key: "sthsecret+keylike",
+      }
     end
   end
 end

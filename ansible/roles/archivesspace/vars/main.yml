@@ -1,8 +1,0 @@
-archivesspace_version: v1.4.2
-archivesspace_root: /opt
-archivesspace_unzip_target: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}"
-archivesspace_src: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}/archivesspace"
-archivesspace_home: "{{ archivesspace_root}}/archivesspace"
-jdbc_version: 5.1.36
-
-archivesspace_hostname: localhost

@@ -1,0 +1,83 @@
+---
+- name: Check if we have already fetched the source for this version.
+  stat:
+    path: "{{ archivesspace_unzip_target }}/archivesspace"
+  register: unzipped
+
+- name: Ensure Aspace home directory exists.
+  file:
+    path: "{{ archivesspace_unzip_target }}"
+    state: directory
+
+- name: Unzip AS
+  unarchive:
+    src: "{{ archivesspace_download_url }}"
+    dest: "{{ archivesspace_unzip_target }}"
+    copy: no
+  when: unzipped.stat.exists == false
+
+- name: make symlink
+  file:
+    path: "{{ archivesspace_home }}"
+    src: "{{ archivesspace_unzip_target }}/archivesspace"
+    state: link
+    force: yes
+
+- name: Get mysql connector
+  get_url:
+    url: "http://central.maven.org/maven2/mysql/mysql-connector-java/{{ archivesspace_jdbc_version }}/mysql-connector-java-{{ archivesspace_jdbc_version }}.jar"
+    dest: "{{ archivesspace_src }}/lib/"
+
+# @TODO may need to define an archivesspace restart handler to pickup changes here
+# @TODO also figure out how to prevent lineinfiles from going to EOF
+- name: Set log level
+  lineinfile:
+    state: present
+    line: 'AppConfig[:backend_log_level] = "warn"'
+    insertafter: '#AppConfig[:backend_log_level] = "debug"'
+    dest: "{{ archivesspace_src }}/config/config.rb"
+
+- name: configure connector
+  lineinfile:
+    state: present
+    line: "AppConfig[:db_url] = \"jdbc:mysql://{{ archivesspace_mysql_host }}:3306/archivesspace?user={{ archivesspace_mysql_user }}&password={{ archivesspace_mysql_pass }}&useUnicode=true&characterEncoding=UTF-8\""
+    insertafter: EOF
+    dest: "{{ archivesspace_src }}/config/config.rb"
+
+- name: check init script exists
+  stat:
+    path: /etc/init.d/archivesspace
+  register: init_exists
+
+- name: Check link exists
+  stat:
+    path: "{{ archivesspace_home }}"
+  register: aspace_link
+
+- name: Remove initial directory
+  file:
+    path: "{{ archivesspace_home }}"
+    state: absent
+  when: aspace_link.stat.isdir == true
+
+- name: Ensure symlink exists
+  file:
+    path: "{{ archivesspace_home }}"
+    src: "{{ archivesspace_src }}"
+    state: link
+    force: true
+
+- name: setup init script
+  file:
+    path: "/etc/init.d/archivesspace"
+    src:  "{{ archivesspace_home }}/archivesspace.sh"
+    state: link
+
+- name: ensure runlevel
+  command: "update-rc.d archivesspace defaults"
+
+- name: Ensure java memory is set
+  lineinfile:
+    line: 'export ASPACE_JAVA_XMX="-Xmx{{ archivesspace_java_xmx }}m"'
+    path: /etc/init.d/archivesspace
+    insertafter: "### END INIT INFO"

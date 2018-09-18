@@ -1,0 +1,50 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+  - import_tasks: ssl-selfsigned.yml
+    when: archivesspace_ssl_selfsigned
+
+  - import_tasks: ssl-ca.yml
+    when: not archivesspace_ssl_selfsigned
+
+  - openssl_dhparam:
+      path: "{{ ansible_openssl_dhparam_path }}"
+      size: 2048
+
+  - name: Configure apache ssl params
+    template:
+      src: templates/ssl-params.conf.j2
+      dest: /etc/apache2/conf-available/ssl-params.conf
+
+  - name: Configure apache ssl vhost
+    template:
+      src: templates/default-ssl.conf.j2
+      dest: /etc/apache2/sites-available/default-ssl.conf
+
+  - name: Re-configure apache non-ssl vhost
+    template:
+      src: templates/vhosts.conf.j2
+      dest: /etc/apache2/sites-available/vhosts.conf
+
+  - name: Enable ssl mods
+    command: "a2enmod {{ item }}"
+    with_items:
+      - ssl
+      - headers
+
+  - name: Enable ssl-conf
+    command: a2enconf ssl-params
+
+  - name: Enable ssl vhost
+    command: "a2ensite {{ item }}"
+    with_items:
+      - default-ssl
+      - vhosts
+
+
+  - name: Restart apache2
+    service:
+      name: apache2
+      state: restarted

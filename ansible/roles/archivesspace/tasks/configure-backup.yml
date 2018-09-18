@@ -1,0 +1,32 @@
+- name: Ensure backup script is in place
+  template:
+    src: templates/aspace-backup.sh.j2
+    dest: /opt/aspace-backup.sh
+    mode: '0700'
+
+- name: Ensure backup dir exists
+  file:
+    path: "{{ archivesspace_backup_dir }}"
+    state: directory
+    mode: '0775'
+
+- name: Ensure dir exists
+  file:
+    path: "{{ archivesspace_migrations_dir }}"
+    state: directory
+
+- name: Ensure dir exists
+  file:
+    path: "{{ archivesspace_rotations_dir }}"
+    state: directory
+
+- name: setup cron task
+  cron:
+    name: "aspace backup process"
+    minute: "{{ aspace_backup_cron.minute }}"
+    hour: "{{ aspace_backup_cron.hour }}"
+    day: "{{ aspace_backup_cron.day }}"
+    month: "{{ aspace_backup_cron.month }}"
+    weekday: "{{ aspace_backup_cron.weekday }}"
+    user: root
+    job: "/opt/aspace-backup.sh"

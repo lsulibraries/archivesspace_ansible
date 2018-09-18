@@ -1,0 +1,69 @@
+---
+- include: shutdown.yml
+
+- name: Delete old restore container
+  file:
+    path: /tmp/aspace-restore
+    state: absent
+  when: archivesspace_restore_type == 'aspace'
+
+- name: Ensure a container for aspace restore
+  file:
+    path: /tmp/aspace-restore
+    state: directory
+  when: archivesspace_restore_type == 'aspace'
+
+- unarchive:
+    src: "/tmp/{{ archivesspace_restore_s3_filename }}"
+    dest: "/tmp/aspace-restore"
+    remote_src: yes
+  when: archivesspace_restore_type == 'aspace'
+
+- find:
+    paths: /tmp/aspace-restore/
+    patterns: "*snapshot*"
+    use_regex: no
+    recurse: yes
+    file_type: directory
+  register: solrsnapdir
+  when: archivesspace_restore_type == 'aspace'
+
+- name: Copy solr index into place
+  shell: "cp -a {{ item.path }}/* {{ archivesspace_home }}/data/solr_index/index/"
+  with_items: "{{ solrsnapdir.files }}"
+  when: archivesspace_restore_type == 'aspace'
+
+- find:
+    paths: /tmp/aspace-restore/
+    patterns: "*indexer_state*"
+    use_regex: no
+    recurse: yes
+    file_type: directory
+  register: indexerdir
+  when: archivesspace_restore_type == 'aspace'
+
+- name: Copy indexer state into place
+  shell: "cp -a {{ item.path }}/* {{ archivesspace_home }}/data/"
+  with_items: "{{ indexerdir.files }}"
+  when: archivesspace_restore_type == 'aspace'
+
+- name: import db
+  mysql_db:
+    target: "/tmp/aspace-restore/mysqldump.sql"
+    db: archivesspace
+    config_file: /root/.my.cnf
+    state: import
+  when: archivesspace_restore_type == 'aspace'
+
+- name: import db
+  mysql_db:
+    target: "/tmp/{{ archivesspace_restore_s3_filename }}"
+    db: archivesspace
+    config_file: /root/.my.cnf
+    state: import
+  when: archivesspace_restore_type == 'mysqldump'
+
+- include: rebuild-solr.yml
+  when: archivesspace_rebuild_index
+
+- include: startup.yml

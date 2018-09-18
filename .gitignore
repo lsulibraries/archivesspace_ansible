@@ -1,4 +1,10 @@
-*~
 .vagrant/*
+*.passwd
+*.retry
+*~
 ansible/prod
 aws_secrets
+hosts
+ubuntu-xenial-16.04-cloudimg-console.log
+vault-key
+vlt/

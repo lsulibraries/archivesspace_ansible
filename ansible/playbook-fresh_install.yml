@@ -1,0 +1,51 @@
+---
+- hosts: all
+  become: true
+  gather_facts: false
+  pre_tasks:
+  - name: Install python for Ansible
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    changed_when: False
+
+  # Manually gather facts once python is installed
+  - name: gather facts
+    setup:
+
+  vars:
+    archivesspace_role_mode: 'fresh'
+    archivesspace_version: v2.3.2
+
+  roles:
+    - common
+    - ansible-role-apache
+    - ansible-role-git
+    - ansible-role-mysql
+    - ansible-role-java
+    - archivesspace
+    - ansible-role-s3-sync
+    - ansible-role-rotate-backups
+
+
+  post_tasks:
+    # this should prob be somewhere neater.
+  - name: cron sync to s3
+    cron:
+      name: "migrations sync"
+      minute: "{{ s3_sync_cron.minute }}"
+      hour: "{{ s3_sync_cron.hour }}"
+      day: "{{ s3_sync_cron.day }}"
+      month: "{{ s3_sync_cron.month }}"
+      weekday: "{{ s3_sync_cron.weekday }}"
+      user: "{{ s3_sync_agent_linux_username }}"
+      job: "{{ s3_sync_aws_cli_bin_location }} s3 sync {{ archivesspace_migrations_dir }}/ s3://{{ s3_sync_bucket }}/{{ archivesspace_s3_migrations_folder }}"
+
+  - name: cron sync (with delete) to s3 # requires that ec2 instance is configured with an appropriate IAM role.
+    cron:
+      name: "s3 sync"
+      minute: "{{ s3_sync_cron.minute }}"
+      hour: "{{ s3_sync_cron.hour }}"
+      day: "{{ s3_sync_cron.day }}"
+      month: "{{ s3_sync_cron.month }}"
+      weekday: "{{ s3_sync_cron.weekday }}"
+      user: "{{ s3_sync_agent_linux_username }}"
+      job: "{{ s3_sync_aws_cli_bin_location }} s3 sync --delete {{ archivesspace_rotations_dir }}/ s3://{{ s3_sync_bucket }}/{{ archivesspace_s3_rotations_folder }}"

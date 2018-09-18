@@ -1,0 +1,35 @@
+## when the key/cert are in the files/ dir
+
+- name: Move cert into place
+  copy:
+    src: files/cert
+    dest: "{{ ansible_openssl_cert_path }}"
+    owner: root
+    mode: '0644'
+  when: archivesspace_ssl_files
+
+- name: Move key into place
+  copy:
+    src: files/key
+    dest: "{{ ansible_openssl_privatekey_path }}"
+    owner: root
+    mode: '0600'
+  when: archivesspace_ssl_files
+
+## for key/cert vaulted in group_vars/env
+
+- name: Move cert into place
+  copy:
+    content: "{{ ansible_openssl_cert }}"
+    dest: "{{ ansible_openssl_cert_path }}"
+    owner: root
+    mode: '0644'
+  when: not archivesspace_ssl_files
+
+- name: Move key into place
+  copy:
+    content: "{{ ansible_openssl_privatekey }}"
+    dest: "{{ ansible_openssl_privatekey_path }}"
+    owner: root
+    mode: '0600'
+  when: not archivesspace_ssl_files

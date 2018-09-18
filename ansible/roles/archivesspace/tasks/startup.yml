@@ -1,0 +1,11 @@
+- name: Start the app
+  service:
+    name:    archivesspace
+    state:   restarted
+    enabled: yes
+  environment:
+    JAVA_FONTS: /usr/share/fonts/truetype
+
+- wait_for:
+    port: 8080
+    delay: 30

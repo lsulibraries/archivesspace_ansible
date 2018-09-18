@@ -1,0 +1,24 @@
+- openssl_dhparam:
+    path: "{{ ansible_openssl_dhparam_path }}"
+    size: 2048
+
+- name: Configure apache ssl params
+  template:
+    src: templates/ssl-params.conf.j2
+    dest: /etc/apache2/conf-available/ssl-params.conf
+
+- name: Configure apache ssl vhost
+  template:
+    src: templates/default-ssl.conf.j2
+    dest: /etc/apache2/sites-available/default-ssl.conf
+
+- name: Enable ssl-conf
+  command: a2enconf ssl-params
+
+- name: Enable ssl vhost
+  command: a2ensite default-ssl
+
+- name: Restart apache2
+  service:
+    name: apache2
+    state: restarted

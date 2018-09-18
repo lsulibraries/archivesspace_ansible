@@ -1,0 +1,45 @@
+
+apache_create_vhosts: true
+apache_vhosts_filename: "vhosts.conf"
+apache_remove_default_vhost: true
+
+apache_vhosts:
+  # Additional optional properties: 'serveradmin, serveralias, extra_parameters'.
+  - servername: "{{ archivesspace_production_hostname }}"
+    serveradmin: "{{ archivesspace_apache_email }}"
+    extra_parameters: |
+      Redirect "/" "https://{{ archivesspace_production_hostname }}"
+  - servername: "{{ archivesspace_test_hostname }}"
+    serveradmin: "{{ archivesspace_apache_email }}"
+    extra_parameters: |
+      ProxyPass "/" "http://{{ archivesspace_test_backend_ip }}/"
+      ProxyPassReverse "/" "http://{{ archivesspace_test_backend_ip }}/"
+
+apache_vhosts_ssl:
+  - servername: "{{ archivesspace_production_hostname }}"
+    serveradmin: "{{ archivesspace_apache_email }}"
+    certificate_file: "{{ archivesspace_cert_path }}/{{ archivesspace_production_cert_filename }}"
+    certificate_chain_file: "{{ archivesspace_cert_path }}/{{ archivesspace_production_chain_filename }}"
+    certificate_key_file: "{{ archivesspace_key_path }}/{{ archivesspace_production_key_filename }}"
+    extra_parameters: |
+      ProxyPass "/" "http://{{ archivesspace_production_backend_ip }}/"
+      ProxyPassReverse "/" "http://{{ archivesspace_production_backend_ip }}/"
+
+  # - servername: "{{ archivesspace_test_hostname }}"
+  #   certificate_file: "{{ archivesspace_cert_path }}/{{ archivesspace_test_cert_filename }}"
+  #   certificate_key_file: "{{ archivesspace_key_path }}/{{ archivesspace_test_key_filename }}"
+  #   extra_parameters: |
+  #     ProxyPass "/" "http://{{ archivesspace_test_backend_ip }}/"
+  #     ProxyPassReverse "/" "http://{{ archivesspace_test_backend_ip }}/"
+
+apache_mods_enabled:
+  - headers.load
+  - proxy_http.load
+  - proxy.load
+  - ssl.load
+
+apache_state: stopped
+
+
+archivesspace_cert_path: /etc/ssl/certs
+archivesspace_key_path: /etc/ssl/private
