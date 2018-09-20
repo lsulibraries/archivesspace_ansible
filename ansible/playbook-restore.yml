@@ -3,8 +3,8 @@
   become: yes
   vars:
     archivesspace_rebuild_index: no # yes if all you have is sql dump
-    archivesspace_restore_s3_filename: v2.3.2.zip
-    archivesspace_restore_s3_path: "{{ archivesspace_s3_migrations_folder }}"
+    archivesspace_restore_s3_filename: aspace-2018-09-20_14-00-01.zip
+    archivesspace_restore_s3_path: "{{ archivesspace_s3_rotations_folder }}"
     archivesspace_restore_type: 'aspace' # one of [mysqldump | aspace]
     archivesspace_role_mode: 'restore'
 
@@ -12,7 +12,7 @@
   - name: get latest backup from s3
     # https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html
     # https://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html
-    command: "{{ s3_sync_aws_cli_bin_location }} s3 cp s3://{{ s3_sync_bucket }}/{{ archivesspace_s3_migrations_folder }}/{{ archivesspace_restore_s3_filename }} /tmp/"
+    command: "{{ s3_sync_aws_cli_bin_location }} s3 cp s3://{{ s3_sync_bucket }}/{{ archivesspace_restore_s3_path }}/{{ archivesspace_restore_s3_filename }} /tmp/"
     environment:
       AWS_ACCESS_KEY_ID: "{{ archivesspace_restore_s3_access_key_id }}"
       AWS_DEFAULT_REGION: us-west-2
