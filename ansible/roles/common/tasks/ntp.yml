@@ -1,0 +1,16 @@
+- apt:
+    name: ntp
+
+- name: Configure ntp
+  lineinfile:
+    line: "server ntp1.lsu.edu"
+    insertbefore: "server 0.ubuntu.pool.ntp.org"
+    dest: /etc/ntp.conf
+
+- name: Set timezone
+  command: timedatectl set-timezone America/Chicago
+
+- name: Restart ntp
+  service:
+    name: ntp
+    state: restarted

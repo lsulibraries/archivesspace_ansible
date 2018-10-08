@@ -15,17 +15,17 @@ table filter {
         interface lo ACCEPT;
 
         # respond to ping
-        proto icmp ACCEPT; 
+        proto icmp ACCEPT;
 
         # allow IPsec
         proto udp dport 500 ACCEPT;
         proto (esp ah) ACCEPT;
 
         # allow SSH connections
-        saddr {{ admin_network }} proto tcp dport ssh ACCEPT;
+        saddr 0/0 proto tcp dport ssh ACCEPT;
 
-	# our services to the world
-        proto tcp dport (80 443) ACCEPT;
+        # our services to the world
+        saddr 0/0 proto tcp dport (80 443) ACCEPT;
 
 	# private http services
 	saddr {{ admin_network }} proto tcp dport (8080 8090 8081 8089) ACCEPT;
