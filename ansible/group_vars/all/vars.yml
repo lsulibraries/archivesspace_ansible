@@ -58,6 +58,16 @@ apache_vhosts:
 apache_vhosts_filename: "vhosts.conf"
 apache_remove_default_vhost: true
 
+aspace_proxy_apache_email: aspace@example.com
+aspace_proxy_cert_filename: aspace.cert
+aspace_proxy_chain_filename: aspace.chain
+aspace_proxy_key_filename: aspace.key
+aspace_proxy_production_backend_ip: 123.45.67.89
+aspace_proxy_production_hostname: aspace.example.com
+aspace_proxy_ssl_use_chain: no
+aspace_proxy_test_backend_ip: 89.67.45.123
+aspace_proxy_test_hostname: test.aspace.example.com
+
 # roles/ansible-role-mysql
 mysql_root_password: root
 

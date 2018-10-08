@@ -1,5 +1,5 @@
 ---
-- hosts: proxy
+- hosts: all
   become: true
   gather_facts: false
   pre_tasks:
@@ -15,41 +15,94 @@
     service:
       name: apache2
       state: stopped
+    ignore_errors: yes
+
+    # https://www.jeffgeerling.com/blog/2017/generating-self-signed-openssl-certs-ansible-24s-crypto-modules
+  - name: Generate an OpenSSL private key.
+    openssl_privatekey:
+      path: files/aspace.key
+      force: yes
+    delegate_to: localhost
+    become: no
+
+  - name: Generate an OpenSSL CSR.
+    openssl_csr:
+      path: files/aspace.csr
+      privatekey_path: files/aspace.key
+      common_name: "{{ aspace_proxy_production_hostname }}"
+      force: yes
+    delegate_to: localhost
+    become: no
+
+  - name: Generate a Self Signed OpenSSL certificate
+    openssl_certificate:
+      path: files/aspace.crt
+      privatekey_path: files/aspace.key
+      csr_path: files/aspace.csr
+      provider: selfsigned
+      force: yes
+    delegate_to: localhost
+    become: no
+
+  - name: check if chain exists
+    stat:
+      path: files/aspace.chain
+    register: aspace_chain
 
   vars:
+
+    apache_create_vhosts: true
+    apache_vhosts_filename: "vhosts.conf"
+    apache_remove_default_vhost: true
+
+    apache_vhosts:
+      # Additional optional properties: 'serveradmin, serveralias, extra_parameters'.
+      - servername: "{{ aspace_proxy_production_hostname }}"
+        serveradmin: "{{ aspace_proxy_apache_email }}"
+        extra_parameters: |
+          Redirect "/" "https://{{ aspace_proxy_production_hostname }}"
+      - servername: "{{ aspace_proxy_test_hostname }}"
+        serveradmin: "{{ aspace_proxy_apache_email }}"
+        extra_parameters: |
+          Redirect "/" "https://{{ aspace_proxy_test_hostname }}"
+
+    apache_vhosts_ssl:
+      - servername: "{{ aspace_proxy_production_hostname }}"
+        serveradmin: "{{ aspace_proxy_apache_email }}"
+        certificate_file: "{{ aspace_proxy_cert_path }}/{{ aspace_proxy_cert_filename }}"
+        certificate_key_file: "{{ aspace_proxy_key_path }}/{{ aspace_proxy_key_filename }}"
+        extra_parameters: |
+          ProxyPass "/" "http://{{ aspace_proxy_production_backend_ip }}/"
+          ProxyPassReverse "/" "http://{{ aspace_proxy_production_backend_ip }}/"
+
+      - servername: "{{ aspace_proxy_test_hostname }}"
+        certificate_file: "{{ aspace_proxy_cert_path }}/{{ aspace_proxy_cert_filename }}"
+        certificate_key_file: "{{ aspace_proxy_key_path }}/{{ aspace_proxy_key_filename }}"
+        extra_parameters: |
+          ProxyPass "/" "http://{{ aspace_proxy_test_backend_ip }}/"
+          ProxyPassReverse "/" "http://{{ aspace_proxy_test_backend_ip }}/"
+
+    apache_mods_enabled:
+      - headers.load
+      - proxy_http.load
+      - proxy.load
+      - ssl.load
+      - socache_shmcb.load
+
+    apache_ignore_missing_ssl_certificate: false
+
+    apache_state: stopped
+
+    aspace_proxy_cert_path: /etc/ssl/certs
+    aspace_proxy_key_path: /etc/ssl/private
+
   roles:
     - common
     - ansible-role-apache
 
   post_tasks:
-  - openssl_dhparam:
-      path: "{{ ansible_openssl_dhparam_path }}"
-      size: 2048
+  - include: playbook-proxy-ssl.yml
 
-  - name: Configure apache ssl params
-    template:
-      src: templates/ssl-params.conf.j2
-      dest: /etc/apache2/conf-available/ssl-params.conf
-
-  - name: Enable ssl-conf
-    command: a2enconf ssl-params
-
-  - name: Copy certs
-    copy:
-      src: "files/{{ item }}"
-      dest: "{{ archivesspace_cert_path }}/{{ item }}"
-    with_items:
-      - "{{ archivesspace_production_cert_filename }}"
-      - "{{ archivesspace_production_chain_filename }}"
-
-  - name: Copy keys
-    copy:
-      src: "files/{{ item }}"
-      dest: "{{ archivesspace_key_path }}/{{ item }}"
-    with_items:
-      - "{{ archivesspace_production_key_filename }}"
-
-  - name: Restart apache2
-    service:
+  - service:
       name: apache2
-      state: restarted
+      state: started

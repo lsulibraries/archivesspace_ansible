@@ -41,7 +41,7 @@ Vagrant.configure(2) do |config|
   else
     # Provisioning configuration for Ansible (for Mac/Linux hosts).
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/playbook-fresh_install.yml"
+      ansible.playbook = "ansible/playbook-proxy.yml"
       ansible.verbose = 'vv'
       ansible.extra_vars = {
         archivesspace_hostname: "192.168.33.10",
