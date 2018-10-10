@@ -49,3 +49,6 @@
       weekday: "{{ s3_sync_cron.weekday }}"
       user: "{{ s3_sync_agent_linux_username }}"
       job: "{{ s3_sync_aws_cli_bin_location }} s3 sync --delete {{ archivesspace_rotations_dir }}/ s3://{{ s3_sync_bucket }}/{{ archivesspace_s3_rotations_folder }}"
+
+    # Ensure our DR user can login
+  - include: playbook-backup-admin.yml
