@@ -9,8 +9,3 @@
     - unzip
     - emacs
     - tree
-
-- include: ferm.yml
-  when: ferm_enabled
-
-- include: ntp.yml

@@ -1,6 +1,6 @@
 aspace_backup_cron:
-  minute: '*'
-  hour: '*'
+  minute: '2'
+  hour: '4'
   day: '*'
   month: '*'
   weekday: '*'
@@ -18,4 +18,4 @@ archivesspace_role_mode: "not set" # should be one of [ fresh, restor, upgrade ]
 archivesspace_root: /opt
 archivesspace_src: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}/archivesspace"
 archivesspace_unzip_target: "{{ archivesspace_root}}/archivesspace-{{ archivesspace_version }}"
-archivesspace_version: v1.4.2
+archivesspace_version: v2.3.2

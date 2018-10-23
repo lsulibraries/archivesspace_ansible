@@ -1,2 +1,4 @@
 archivesspace_ssl_selfsigned: no
 archivesspace_ssl_files: yes
+archivesspace_install_s3_sync: yes
+timedatectl_timezone: America/Chicago

@@ -20,7 +20,9 @@ archivesspace_mysql_user: aspace
 
 archivesspace_ssl_selfsigned: yes
 
+
 # s3 sync vars
+archivesspace_install_s3_sync: no
 s3_sync_aws_access_key_id: abcdefg
 s3_sync_aws_cli_bin_location: /usr/local/bin/aws
 s3_sync_aws_secret_access_key: somethinglong+confusing

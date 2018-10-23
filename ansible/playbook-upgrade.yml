@@ -4,6 +4,6 @@
   vars:
     archivesspace_role_mode: 'upgrade'
     archivesspace_rebuild_index: yes
-    archivesspace_version: v2.3.2
+    archivesspace_version: v2.5.0
   roles:
   - archivesspace

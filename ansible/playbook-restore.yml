@@ -3,7 +3,7 @@
   become: yes
   vars:
     archivesspace_rebuild_index: no # yes if all you have is sql dump
-    archivesspace_restore_s3_filename: aspace-2018-09-20_14-00-01.zip
+    archivesspace_restore_s3_filename: aspace-latest.zip
     archivesspace_restore_s3_path: "{{ archivesspace_s3_rotations_folder }}"
     archivesspace_restore_type: 'aspace' # one of [mysqldump | aspace]
     archivesspace_role_mode: 'restore'

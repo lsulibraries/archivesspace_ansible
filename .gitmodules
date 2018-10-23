@@ -17,3 +17,6 @@
 [submodule "ansible/roles/ansible-role-rotate-backups"]
 	path = ansible/roles/ansible-role-rotate-backups
 	url = https://github.com/lsulibraries/ansible-role-rotate-backups.git
+[submodule "ansible/roles/ansible-timedatectl"]
+	path = ansible/roles/ansible-timedatectl
+	url = https://github.com/ypsman/ansible-timedatectl
